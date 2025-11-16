@@ -5,12 +5,6 @@ import { getBlogPost, getAllSlugs } from '@/lib/utils/blog'
 import Card from '@/components/ui/Card'
 import styles from './post.module.css'
 
-interface BlogPostPageProps {
-    params: {
-        slug: string
-    }
-}
-
 export async function generateStaticParams() {
     const slugs = getAllSlugs()
     return slugs.map((slug) => ({
@@ -20,9 +14,13 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({
                                            params,
-                                       }: BlogPostPageProps): Promise<Metadata> {
+                                       }: {
+    params: Promise<{ slug: string }>
+}): Promise<Metadata> {
 
-    const post = await getBlogPost(params.slug)
+    const { slug } = await params;
+
+    const post = await getBlogPost(slug);
 
     if (!post) {
         return {
@@ -48,11 +46,12 @@ export async function generateMetadata({
             title: post.title,
             description: post.description || post.excerpt,
         },
-    }
+    };
 }
 
-export default async function BlogPost({ params }: BlogPostPageProps) {
-    const post = await getBlogPost(params.slug)
+export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
+    const post = await getBlogPost(slug);
 
     if (!post) {
         notFound()
