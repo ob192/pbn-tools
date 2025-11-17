@@ -50,6 +50,7 @@ export async function generateMetadata({
 }
 
 export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+
     const { slug } = await params;
     const post = await getBlogPost(slug);
 
