@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import { getAllSlugs } from '@/lib/utils/blog'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://your-domain.com'
+    const baseUrl = 'https://jwt-decode.online'
     const blogSlugs = getAllSlugs()
 
     const blogUrls = blogSlugs.map((slug) => ({

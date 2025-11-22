@@ -6,7 +6,7 @@ import { Analytics } from "@vercel/analytics/next"
 
 
 export const metadata: Metadata = {
-    metadataBase: new URL('https://your-domain.com'),
+    metadataBase: new URL('https://jwt-decode.online'),
     title: {
         default: 'JWT Decoder - Free JWT & JWE Tool',
         template: '%s | JWT Decoder',
@@ -14,18 +14,18 @@ export const metadata: Metadata = {
     description:
         'Free, secure JWT and JWE decoder and encoder. Privacy-first, client-side token debugging.',
     alternates: {
-        canonical: 'https://your-domain.com',
+        canonical: 'https://jwt-decode.online',
     },
     openGraph: {
         title: 'JWT & JWE Decoder/Encoder - Privacy-First JWT Tool',
         description:
             'Decode and encode JSON Web Tokens securely in your browser. No data leaves your device.',
         type: 'website',
-        url: 'https://your-domain.com',
+        url: 'https://jwt-decode.online',
         siteName: 'JWT Decoder',
         images: [
             {
-                url: 'https://your-domain.com/og-image.png',
+                url: 'https://jwt-decode.online/og-image.png',
                 width: 1200,
                 height: 630,
                 alt: 'Screenshot of the JWT & JWE Decoder / Encoder UI',
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
         card: 'summary_large_image',
         title: 'JWT & JWE Decoder/Encoder',
         description: 'Secure, client-side JWT debugging tool',
-        images: ['https://your-domain.com/og-image.png'],
+        images: ['https://jwt-decode.online/og-image.png'],
     },
     icons: {
         icon: [
@@ -72,7 +72,7 @@ export default function RootLayout({children}: { children: ReactNode }) {
         name: 'JWT Decoder',
         description:
             'Free, secure JWT and JWE decoder and encoder. Privacy-first, client-side token debugging.',
-        url: 'https://your-domain.com',
+        url: 'https://jwt-decode.online',
         applicationCategory: 'DeveloperApplication',
         operatingSystem: 'Web Browser',
         offers: {

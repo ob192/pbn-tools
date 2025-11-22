@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
             userAgent: '*',
             allow: '/',
         },
-        sitemap: 'https://your-domain.com/sitemap.xml',
-        host: 'https://your-domain.com',
+        sitemap: 'https://jwt-decode.online/sitemap.xml',
+        host: 'https://jwt-decode.online',
     }
 }

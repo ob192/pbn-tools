@@ -26,7 +26,7 @@ export const metadata: Metadata = {
         description:
             'Decode and encode JSON Web Tokens securely in your browser. No data leaves your device.',
         type: 'website',
-        url: 'https://your-domain.com',
+        url: 'https://jwt-decode.online',
         siteName: 'JWT Decoder',
     },
     twitter: {
