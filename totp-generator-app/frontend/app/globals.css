@@ -1,0 +1,267 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    * {
+        @apply border-neutral-200;
+    }
+
+    .dark * {
+        @apply border-neutral-700;
+    }
+
+    body {
+        @apply bg-neutral-50 text-neutral-900;
+        font-feature-settings: "rlig" 1, "calt" 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .dark body {
+        @apply bg-neutral-900 text-neutral-50;
+    }
+
+    /* Apply dark mode based on class or system preference */
+    @media (prefers-color-scheme: dark) {
+        body {
+            @apply bg-neutral-900 text-neutral-50;
+        }
+    }
+}
+
+@layer components {
+    .totp-digit {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.75rem;
+        height: 3.5rem;
+        font-size: 1.5rem;
+        line-height: 2rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-weight: 700;
+        background-color: rgb(245 245 245);
+        border-radius: 0.5rem;
+        transition: all 200ms ease;
+        box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    }
+
+    @media (min-width: 640px) {
+        .totp-digit {
+            width: 3.25rem;
+            height: 4rem;
+            font-size: 1.875rem;
+            line-height: 2.25rem;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .totp-digit {
+            width: 3.75rem;
+            height: 4.5rem;
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+        }
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .totp-digit {
+            background-color: rgb(38 38 38);
+        }
+    }
+
+    .dark .totp-digit {
+        background-color: rgb(38 38 38);
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background-color: rgb(255 255 255);
+        border: 1px solid rgb(212 212 212);
+        border-radius: 0.5rem;
+        color: rgb(23 23 23);
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        transition: all 200ms ease;
+    }
+
+    .input-field::placeholder {
+        color: rgb(163 163 163);
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: transparent;
+        box-shadow: 0 0 0 2px rgb(59 130 246);
+    }
+
+    .input-field.error {
+        border-color: rgb(239 68 68);
+    }
+
+    .input-field.error:focus {
+        box-shadow: 0 0 0 2px rgb(239 68 68);
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .input-field {
+            background-color: rgb(38 38 38);
+            border-color: rgb(82 82 82);
+            color: rgb(245 245 245);
+        }
+
+        .input-field::placeholder {
+            color: rgb(115 115 115);
+        }
+    }
+
+    .dark .input-field {
+        background-color: rgb(38 38 38);
+        border-color: rgb(82 82 82);
+        color: rgb(245 245 245);
+    }
+
+    .dark .input-field::placeholder {
+        color: rgb(115 115 115);
+    }
+
+    .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.625rem 1rem;
+        background-color: rgb(59 130 246);
+        color: rgb(255 255 255);
+        font-weight: 500;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        border-radius: 0.5rem;
+        transition: all 200ms ease;
+        cursor: pointer;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background-color: rgb(37 99 235);
+    }
+
+    .btn-primary:active {
+        background-color: rgb(29 78 216);
+    }
+
+    .btn-primary:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgb(255 255 255), 0 0 0 4px rgb(59 130 246);
+    }
+
+    .btn-primary:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .btn-primary {
+            background-color: rgb(37 99 235);
+        }
+
+        .btn-primary:hover {
+            background-color: rgb(59 130 246);
+        }
+
+        .btn-primary:focus {
+            box-shadow: 0 0 0 2px rgb(23 23 23), 0 0 0 4px rgb(59 130 246);
+        }
+    }
+
+    .dark .btn-primary {
+        background-color: rgb(37 99 235);
+    }
+
+    .dark .btn-primary:hover {
+        background-color: rgb(59 130 246);
+    }
+
+    .dark .btn-primary:focus {
+        box-shadow: 0 0 0 2px rgb(23 23 23), 0 0 0 4px rgb(59 130 246);
+    }
+
+    .card {
+        background-color: rgb(255 255 255);
+        border-radius: 1rem;
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        border: 1px solid rgb(229 229 229);
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .card {
+            background-color: rgb(38 38 38);
+            border-color: rgb(64 64 64);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.2);
+        }
+    }
+
+    .dark .card {
+        background-color: rgb(38 38 38);
+        border-color: rgb(64 64 64);
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.2);
+    }
+}
+
+/* Custom scrollbar for dark mode */
+@media (prefers-color-scheme: dark) {
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgb(38 38 38);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: rgb(64 64 64);
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgb(82 82 82);
+    }
+}
+
+.dark ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.dark ::-webkit-scrollbar-track {
+    background: rgb(38 38 38);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: rgb(64 64 64);
+    border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: rgb(82 82 82);
+}
+
+/* Utility for balanced text */
+.text-balance {
+    text-wrap: balance;
+}
+
+/* Screen reader only */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
