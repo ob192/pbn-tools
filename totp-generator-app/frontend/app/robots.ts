@@ -1,14 +1,18 @@
-// File: app/robots.ts
-import { MetadataRoute } from "next";
-import { SITE_URL } from "@/lib/categories";
+// app/robots.ts
+import type { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
+    const siteUrl = 'https://totp-generator.example.com';
+
     return {
-        rules: {
-            userAgent: "*",
-            allow: "/",
-            disallow: ["/api/", "/private/"],
-        },
-        sitemap: `${SITE_URL}/sitemap.xml`,
+        rules: [
+            {
+                userAgent: '*',
+                allow: '/',
+                disallow: ['/api/'] // optional
+            }
+        ],
+        sitemap: `${siteUrl}/sitemap.xml`,
+        host: siteUrl
     };
 }

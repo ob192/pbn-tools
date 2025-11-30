@@ -1,0 +1,75 @@
+// app/manifest.ts
+import type { MetadataRoute } from 'next';
+
+export default function manifest(): MetadataRoute.Manifest {
+    return {
+        name: '2FA & TOTP Code Generator – Secure Authenticator Tool',
+        short_name: '2FA TOTP',
+        lang: 'en',
+        description:
+            'Free, secure, client-side 2FA and TOTP code generator. Generate 6-digit authentication codes using Base32 secret keys. 100% private and browser-based.',
+        start_url: '/',
+        display: 'standalone',
+        background_color: '#0a0a0a',
+        theme_color: '#0a0a0a',
+
+        categories: ['utilities', 'security', 'authentication', 'productivity'],
+        orientation: 'portrait',
+
+        icons: [
+            {
+                src: '/android-chrome-192x192.png',
+                sizes: '192x192',
+                type: 'image/png',
+                purpose: 'any',
+            },
+            {
+                src: '/android-chrome-512x512.png',
+                sizes: '512x512',
+                type: 'image/png',
+                purpose: 'any',
+            },
+            {
+                src: '/apple-touch-icon.png',
+                sizes: '180x180',
+                type: 'image/png',
+                purpose: 'any',
+            },
+            {
+                src: '/favicon-96x96.png',
+                sizes: '96x96',
+                type: 'image/png',
+                purpose: 'any',
+            },
+            {
+                src: '/favicon.svg',
+                sizes: 'any',
+                type: 'image/svg+xml',
+                purpose: 'any',
+            },
+            {
+                src: '/favicon.ico',
+                sizes: '48x48',
+                type: 'image/x-icon',
+                purpose: 'any',
+            },
+        ],
+
+        screenshots: [
+            {
+                src: '/og-image.png',
+                sizes: '1200x630',
+                type: 'image/png',
+            },
+        ],
+
+        shortcuts: [
+            {
+                name: 'Generate 2FA Code',
+                short_name: '2FA Code',
+                url: '/',
+                description: 'Quick access to the TOTP & 2FA code generator.',
+            },
+        ],
+    };
+}

@@ -1,0 +1,93 @@
+{
+  "site": {
+    "name": "2FA Code Generator",
+    "title": "2FA Code Generator - Free & Secure TOTP Generator",
+    "description": "Free, secure, client-side two-factor authentication (2FA) code generator using TOTP. Enter your Base32 secret key to generate secure codes instantly. 100% private and never sent to a server.",
+    "keywords": "2FA, two-factor authentication, TOTP, authenticator, OTP, one-time password, Base32, RFC 6238, secure 2FA generator, Google Authenticator alternative, free authenticator, client-side 2FA",
+    "ogAlt": "2FA Code Generator - Generate secure TOTP codes instantly"
+  },
+
+  "home": {
+    "badge": "100% client-side · Free · No sign-up required",
+    "headline": "2FA Code Generator (Free)",
+    "subheadline": "Generate secure 2FA codes instantly using your Base32 secret key. A private, free, browser-based 2FA/TOTP generator compatible with Google Authenticator and Authy.",
+
+    "footerSecurity": "Your secret stays in your browser—never uploaded or stored.",
+    "footerSpecs": "RFC 6238 · SHA-1 · 30-second interval · 6-digit authentication codes",
+
+    "seoSectionAria": "About the 2FA Code Generator",
+    "aboutTitle": "About This Free 2FA & TOTP Generator",
+    "aboutText": "This free online 2FA (two-factor authentication) code generator uses the TOTP (Time-Based One-Time Password) standard. It works with Google Authenticator, Authy, Microsoft Authenticator, and all TOTP-based authentication systems.",
+
+    "featuresTitle": "Key Features",
+    "feature1": "Fully client-side — no data sent to servers",
+    "feature2": "RFC 6238 compliant TOTP algorithm",
+    "feature3": "Automatic 30-second refresh",
+    "feature4": "Visual countdown progress bar",
+    "feature5": "One-tap copy to clipboard",
+    "feature6": "Supports Base32 secret keys",
+    "feature7": "Mobile-first, responsive layout",
+
+    "howTitle": "How It Works",
+    "howText": "Paste your Base32-encoded secret key from any service that uses 2FA. The generator creates a secure 6-digit TOTP code based on HMAC-SHA1 and the current Unix timestamp—just like standard authenticator apps."
+  },
+
+  "webapp": {
+    "name": "2FA Code Generator (TOTP)",
+    "description": "Generate 2FA authentication codes online using the TOTP method and your Base32 secret key. No data is stored or sent. Secure, private, and fully browser-based.",
+    "category": "SecurityApplication",
+
+    "feature1": "TOTP generation compliant with RFC 6238",
+    "feature2": "Client-side only 2FA code generation",
+    "feature3": "Base32 secret key support",
+    "feature4": "30-second refresh cycle",
+    "feature5": "6-digit authentication codes",
+    "feature6": "Copy-to-clipboard support",
+    "feature7": "Real-time countdown timer",
+    "feature8": "Mobile responsive design",
+
+    "actionName": "Generate 2FA Code"
+  },
+
+  "faq": {
+    "q1": {
+      "question": "What is 2FA?",
+      "answer": "2FA (two-factor authentication) adds an extra layer of security by requiring both your password and a temporary 6-digit code. Most services use the TOTP standard to generate these codes."
+    },
+    "q2": {
+      "question": "Is this 2FA code generator secure?",
+      "answer": "Yes. The generator is 100% client-side, so your Base32 secret key never leaves your device. No information is sent to a server, and the TOTP algorithm follows the industry-standard RFC 6238."
+    },
+    "q3": {
+      "question": "How do I generate 2FA codes online?",
+      "answer": "Paste your Base32 secret key into the generator. A 6-digit TOTP-based 2FA code will appear instantly and refresh every 30 seconds—just like Google Authenticator."
+    },
+    "q4": {
+      "question": "What is a Base32 secret key?",
+      "answer": "A Base32 secret key is provided when you enable 2FA on an account. It uses letters A–Z and digits 2–7 and is used to generate TOTP-based authentication codes."
+    }
+  },
+
+  "totp": {
+    "secretLabel": "Base32 secret key",
+    "secretPlaceholder": "Paste your 2FA secret here",
+    "secretHint": "Use only A–Z and 2–7. Spaces are ignored.",
+
+    "invalidBase32": "Invalid Base32 secret. Use only A–Z and 2–7.",
+    "generateError": "Failed to generate code. Check your secret.",
+
+    "clearSecretAria": "Clear secret",
+
+    "codeSr": "Current 2FA/TOTP code is {code}",
+    "enterSecretSr": "Enter a secret to generate a 2FA code",
+
+    "timerAria": "{seconds} seconds remaining",
+    "codeRefreshLabel": "Code refresh",
+
+    "copy": "Copy code",
+    "copied": "Copied",
+
+    "copyAria": "Copy code to clipboard",
+    "copiedAria": "Copied to clipboard"
+  }
+}
