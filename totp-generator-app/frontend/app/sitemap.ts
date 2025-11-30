@@ -2,7 +2,7 @@
 import type { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const siteUrl = 'https://totp-generator.example.com';
+    const siteUrl = 'https://2fa.media-buying.tools';
     const locales = ['en', 'ru', 'uk'] as const;
 
     const lastModified = new Date();

@@ -7,7 +7,7 @@ import '../globals.css';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
-const siteUrl = 'https://totp-generator.example.com';
+const siteUrl = 'https://2fa.media-buying.tools';
 
 export function generateStaticParams() {
     return [{ locale: 'en' }, { locale: 'ru' }, { locale: 'uk' }];

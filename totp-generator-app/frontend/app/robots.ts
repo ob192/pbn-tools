@@ -2,7 +2,7 @@
 import type { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-    const siteUrl = 'https://totp-generator.example.com';
+    const siteUrl = 'https://2fa.media-buying.tools';
 
     return {
         rules: [

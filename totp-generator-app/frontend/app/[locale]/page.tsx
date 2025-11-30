@@ -4,7 +4,7 @@ import { TotpGenerator } from '@/components/TotpGenerator';
 import Script from 'next/script';
 import { useTranslations, useLocale } from 'next-intl';
 
-const siteUrl = 'https://totp-generator.example.com';
+const siteUrl = 'https://2fa.media-buying.tools';
 
 export default function HomePage() {
     const tSite = useTranslations('site');
