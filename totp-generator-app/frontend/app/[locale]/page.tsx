@@ -3,8 +3,28 @@
 import { TotpGenerator } from '@/components/TotpGenerator';
 import Script from 'next/script';
 import { useTranslations, useLocale } from 'next-intl';
+import { Suspense } from 'react';
 
 const siteUrl = 'https://2fa.media-buying.tools';
+
+function TotpGeneratorWithSuspense() {
+    return (
+        <Suspense fallback={
+            <div className="card p-4 sm:p-5 md:p-6 animate-pulse">
+                <div className="h-10 bg-neutral-800 rounded-lg mb-5" />
+                <div className="flex justify-center gap-2 mb-4">
+                    {[...Array(6)].map((_, i) => (
+                        <div key={i} className="w-12 h-14 bg-neutral-800 rounded-lg" />
+                    ))}
+                </div>
+                <div className="h-2 bg-neutral-800 rounded-full mb-4" />
+                <div className="h-12 bg-neutral-800 rounded-full" />
+            </div>
+        }>
+            <TotpGenerator />
+        </Suspense>
+    );
+}
 
 export default function HomePage() {
     const tSite = useTranslations('site');
@@ -13,38 +33,35 @@ export default function HomePage() {
     const tFaq = useTranslations('faq');
     const locale = useLocale();
 
-    // Map Next locale to language code for JSON-LD
     const inLanguage =
         locale === 'ru' ? 'ru' :
             locale === 'uk' ? 'uk' :
                 'en';
 
-    // Localized Website schema
     const websiteSchema = {
         '@context': 'https://schema.org',
         '@type': 'WebSite',
-        name: tSite('name'),                    // site.name
-        description: tSite('description'),      // site.description
+        name: tSite('name'),
+        description: tSite('description'),
         inLanguage,
         url: siteUrl,
         potentialAction: {
             '@type': 'SearchAction',
             target: {
                 '@type': 'EntryPoint',
-                urlTemplate: `${siteUrl}/?secret={secret}`,
+                urlTemplate: `${siteUrl}/?s={secret}`,
             },
             'query-input': 'required name=secret',
         },
     };
 
-    // Localized WebApplication schema
     const webApplicationSchema = {
         '@context': 'https://schema.org',
         '@type': 'WebApplication',
-        name: tWebapp('name'),                  // webapp.name
-        description: tWebapp('description'),    // webapp.description
+        name: tWebapp('name'),
+        description: tWebapp('description'),
         url: siteUrl,
-        applicationCategory: tWebapp('category'), // e.g. "SecurityApplication"
+        applicationCategory: tWebapp('category'),
         operatingSystem: 'Any',
         inLanguage,
         browserRequirements: 'Requires JavaScript',
@@ -67,7 +84,7 @@ export default function HomePage() {
         screenshot: `${siteUrl}/screenshot.png`,
         potentialAction: {
             '@type': 'UseAction',
-            name: tWebapp('actionName'),        // e.g. "Generate 2FA Code"
+            name: tWebapp('actionName'),
             target: {
                 '@type': 'EntryPoint',
                 urlTemplate: siteUrl,
@@ -79,7 +96,6 @@ export default function HomePage() {
         },
     };
 
-    // Localized FAQ schema
     const faqSchema = {
         '@context': 'https://schema.org',
         '@type': 'FAQPage',
@@ -121,7 +137,6 @@ export default function HomePage() {
 
     return (
         <>
-            {/* JSON-LD: website, webapp, FAQ */}
             <Script
                 id="website-schema"
                 type="application/ld+json"
@@ -145,21 +160,21 @@ export default function HomePage() {
                     <header className="mb-8 sm:mb-10 text-center space-y-3">
                         <div className="inline-flex items-center gap-2 rounded-full bg-neutral-900/80 border border-neutral-800 px-3 py-1 text-xs font-medium text-neutral-300 shadow-sm">
                             <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                            {tHome('badge')} {/* home.badge */}
+                            {tHome('badge')}
                         </div>
 
                         <div className="space-y-3">
                             <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">
-                                {tHome('headline')} {/* home.headline */}
+                                {tHome('headline')}
                             </h1>
                             <p className="text-sm sm:text-base text-neutral-400">
-                                {tHome('subheadline')} {/* home.subheadline */}
+                                {tHome('subheadline')}
                             </p>
                         </div>
                     </header>
 
                     {/* Main Tool */}
-                    <TotpGenerator />
+                    <TotpGeneratorWithSuspense />
 
                     {/* Footer */}
                     <footer className="mt-6 sm:mt-8 text-center space-y-2 text-xs text-neutral-500">
@@ -179,10 +194,8 @@ export default function HomePage() {
                                 />
                             </svg>
                             <span>{tHome('footerSecurity')}</span>
-                            {/* home.footerSecurity, e.g. "Your secret stays in your browser—never uploaded or stored." */}
                         </p>
                         <p>{tHome('footerSpecs')}</p>
-                        {/* home.footerSpecs, e.g. "RFC 6238 · SHA-1 · 30-second interval · 6-digit 2FA codes" */}
                     </footer>
                 </div>
 

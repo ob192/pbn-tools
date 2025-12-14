@@ -89,5 +89,38 @@
 
     "copyAria": "Copy code to clipboard",
     "copiedAria": "Copied to clipboard"
+  },
+
+  "savedSecrets": {
+    "saveTitle": "Save Secret",
+    "editTitle": "Edit Secret",
+    "titleLabel": "Name",
+    "titlePlaceholder": "e.g., Google, GitHub, AWS...",
+    "secretLabel": "Secret Key",
+    "notesLabel": "Notes (optional)",
+    "notesPlaceholder": "Add any notes about this secret...",
+    "colorLabel": "Color Tag",
+    "favoriteLabel": "Mark as favorite",
+    "save": "Save",
+    "update": "Update",
+    "cancel": "Cancel",
+    "close": "Close",
+    "delete": "Delete",
+    "confirmDelete": "Delete this secret?",
+    "loading": "Loading saved secrets...",
+    "savedCount": "{count, plural, =1 {# Saved Secret} other {# Saved Secrets}}",
+    "active": "Active",
+    "use": "Use",
+    "using": "Using",
+    "share": "Share",
+    "shareAria": "Copy share link",
+    "copied": "Copied!",
+    "edit": "Edit",
+    "deleteAria": "Delete secret",
+    "favorite": "Add to favorites",
+    "unfavorite": "Remove from favorites",
+    "saveButton": "Save",
+    "shareLink": "Share Link",
+    "linkCopied": "Link Copied!"
   }
 }
