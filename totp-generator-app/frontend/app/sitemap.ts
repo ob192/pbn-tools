@@ -2,7 +2,7 @@
 import type { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const siteUrl = 'https://2fa.media-buying.tools';
+    const siteUrl = 'https://2fa.usekit.site';
     const locales = ['en', 'ru', 'uk'] as const;
 
     const lastModified = new Date();

@@ -5,7 +5,7 @@ import Script from 'next/script';
 import { useTranslations, useLocale } from 'next-intl';
 import { Suspense } from 'react';
 
-const siteUrl = 'https://2fa.media-buying.tools';
+const siteUrl = 'https://2fa.usekit.site';
 
 function TotpGeneratorWithSuspense() {
     return (

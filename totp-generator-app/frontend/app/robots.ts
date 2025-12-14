@@ -2,7 +2,7 @@
 import type { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-    const siteUrl = 'https://2fa.media-buying.tools';
+    const siteUrl = 'https://2fa.usekit.site';
 
     return {
         rules: [

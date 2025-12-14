@@ -8,7 +8,7 @@ import Script from 'next/script'
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
-const siteUrl = 'https://2fa.media-buying.tools';
+const siteUrl = 'https://2fa.usekit.site';
 
 export function generateStaticParams() {
     return [{ locale: 'en' }, { locale: 'ru' }, { locale: 'uk' }];
