@@ -70,7 +70,7 @@ const webAppSchema = {
     name: "Clean & Paste",
     description:
         "Free invisible Unicode character remover. Clean AI text from hidden watermarks and zero-width characters.",
-    url: "https://promtheon.io/clean-paste",
+    url: "https://cleanpaste.usekit.site",
     applicationCategory: "UtilitiesApplication",
     operatingSystem: "Any",
     offers: {
@@ -227,6 +227,7 @@ export default function CleanPastePage() {
 
             <div className="min-h-screen bg-white text-neutral-900">
                 {/* Navigation */}
+
                 <nav className="sticky top-0 z-50 border-b border-neutral-200 bg-white/80 backdrop-blur-md">
                     <div className="mx-auto max-w-6xl px-4 py-4">
                         <div className="flex items-center justify-between">
@@ -1121,39 +1122,6 @@ export default function CleanPastePage() {
                                 <p className="text-sm italic text-neutral-500">
                                     Just clean and paste. Simple as that.
                                 </p>
-                            </div>
-
-                            {/* Resources */}
-                            <div>
-                                <h4 className="mb-4 font-semibold text-neutral-900">
-                                    Resources
-                                </h4>
-                                <ul className="space-y-2">
-                                    <li>
-                                        <Link
-                                            href="/invisible-characters"
-                                            className="text-neutral-600 transition-colors hover:text-neutral-900"
-                                        >
-                                            Invisible Characters
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link
-                                            href="/statistical-watermarks"
-                                            className="text-neutral-600 transition-colors hover:text-neutral-900"
-                                        >
-                                            Statistical Watermarks
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link
-                                            href="https://promtheon.io/ai-humanizer"
-                                            className="text-neutral-600 transition-colors hover:text-neutral-900"
-                                        >
-                                            AI Humanizer
-                                        </Link>
-                                    </li>
-                                </ul>
                             </div>
 
                             {/* Legal */}

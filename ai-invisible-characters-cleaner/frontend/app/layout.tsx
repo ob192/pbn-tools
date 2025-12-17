@@ -6,7 +6,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    metadataBase: new URL("https://promtheon.io"),
+    metadataBase: new URL("https://cleanpaste.usekit.site"),
     title: "Clean & Paste — Free Invisible Unicode Character Remover | Remove AI Watermarks",
     description:
         "Remove invisible characters from AI-generated text instantly. Free unicode invisible character remover that cleans zero width spaces, byte order marks, and AI watermarks. Just clean and paste.",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     openGraph: {
         type: "website",
         locale: "en_US",
-        url: "https://promtheon.io/clean-paste",
+        url: "https://cleanpaste.usekit.site",
         siteName: "Clean & Paste",
         title: "Clean & Paste — Free Invisible Unicode Character Remover",
         description:
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
         images: ["/og-image.png"],
     },
     alternates: {
-        canonical: "https://promtheon.io/clean-paste",
+        canonical: "https://cleanpaste.usekit.site",
     },
 };
 

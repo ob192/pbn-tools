@@ -10,7 +10,7 @@ export default function robots(): MetadataRoute.Robots {
                 disallow: ["/api/", "/private/"],
             },
         ],
-        sitemap: "https://promtheon.io/sitemap.xml",
-        host: "https://promtheon.io",
+        sitemap: "https://cleanpaste.usekit.site/sitemap.xml",
+        host: "https://cleanpaste.usekit.site",
     };
 }
