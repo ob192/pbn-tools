@@ -717,6 +717,39 @@ export default function CleanPastePage() {
                     </div>
                 </section>
 
+                {/* CTA Section */}
+                <section className="border-y border-neutral-200 bg-gradient-to-br from-neutral-900 to-neutral-800 py-16 md:py-24">
+                    <div className="mx-auto max-w-4xl px-4 text-center">
+                        <h2 className="mb-4 text-3xl font-bold tracking-tight text-white md:text-4xl">
+                            Need Fully Human-Sounding Text?
+                        </h2>
+                        <p className="mb-8 text-lg text-neutral-300">
+                            Removing invisible characters is just the first step. Our advanced
+                            AI Humanizer rewrites AI-generated content to sound completely
+                            natural and bypass all AI detectors.
+                        </p>
+                        <Link
+                            href="https://promtheon.io/ai-humanizer"
+                            className="inline-flex items-center gap-3 rounded-xl bg-white px-8 py-4 text-lg font-semibold text-neutral-900 shadow-lg transition-all hover:bg-neutral-100 hover:shadow-xl"
+                        >
+                            Try the Advanced AI Humanizer
+                            <svg
+                                className="h-5 w-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                                />
+                            </svg>
+                        </Link>
+                    </div>
+                </section>
+
                 {/* Features Section */}
                 <section className="border-y border-neutral-100 bg-neutral-50 py-16 md:py-24">
                     <div className="mx-auto max-w-6xl px-4">
@@ -1007,39 +1040,6 @@ export default function CleanPastePage() {
                                 </ul>
                             </div>
                         </div>
-                    </div>
-                </section>
-
-                {/* CTA Section */}
-                <section className="border-y border-neutral-200 bg-gradient-to-br from-neutral-900 to-neutral-800 py-16 md:py-24">
-                    <div className="mx-auto max-w-4xl px-4 text-center">
-                        <h2 className="mb-4 text-3xl font-bold tracking-tight text-white md:text-4xl">
-                            Need Fully Human-Sounding Text?
-                        </h2>
-                        <p className="mb-8 text-lg text-neutral-300">
-                            Removing invisible characters is just the first step. Our advanced
-                            AI Humanizer rewrites AI-generated content to sound completely
-                            natural and bypass all AI detectors.
-                        </p>
-                        <Link
-                            href="https://promtheon.io/ai-humanizer"
-                            className="inline-flex items-center gap-3 rounded-xl bg-white px-8 py-4 text-lg font-semibold text-neutral-900 shadow-lg transition-all hover:bg-neutral-100 hover:shadow-xl"
-                        >
-                            Try the Advanced AI Humanizer
-                            <svg
-                                className="h-5 w-5"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                                />
-                            </svg>
-                        </Link>
                     </div>
                 </section>
 
