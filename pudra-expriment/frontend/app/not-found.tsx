@@ -12,14 +12,18 @@ export default function NotFound() {
             <div className="text-center">
                 {/* 404 Illustration */}
                 <div className="mb-8">
-                    <span className="text-9xl font-bold text-primary/20">404</span>
+                    <span className="text-9xl font-bold text-primary/20">
+                        404
+                    </span>
                 </div>
 
                 {/* Message */}
-                <h1 className="mb-4 text-3xl font-bold">Page Not Found</h1>
+                <h1 className="mb-4 text-3xl font-bold">
+                    Page Not Found
+                </h1>
                 <p className="mb-8 max-w-md text-muted-foreground">
-                    Sorry, we couldn't find the page you're looking for.
-                    The page may have been moved or doesn't exist.
+                    Sorry, we couldn&apos;t find the page you&apos;re looking for.
+                    The page may have been moved or doesn&apos;t exist.
                 </p>
 
                 {/* Actions */}

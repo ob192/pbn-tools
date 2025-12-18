@@ -363,8 +363,9 @@ export function ProductTable({ products, columns, categoryName }: ProductTablePr
                     </div>
                     <h3 className="mb-2 text-lg font-semibold">No products found</h3>
                     <p className="mb-6 max-w-md text-sm text-muted-foreground">
-                        No products match "<span className="font-medium">{searchQuery}</span>".
-                        Try adjusting your search.
+                        No products match &quot;
+                        <span className="font-medium">{searchQuery}</span>
+                        &quot;. Try adjusting your search.
                     </p>
                     <Button onClick={handleClearSearch} variant="outline" size="sm">
                         Clear Search
