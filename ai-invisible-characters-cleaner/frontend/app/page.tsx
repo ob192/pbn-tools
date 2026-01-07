@@ -231,7 +231,7 @@ export default function CleanPastePage() {
                 <nav className="sticky top-0 z-50 border-b border-neutral-200 bg-white/80 backdrop-blur-md">
                     <div className="mx-auto max-w-6xl px-4 py-4">
                         <div className="flex items-center justify-between">
-                            <Link href="/public" className="flex items-center gap-3">
+                            <Link href="#" className="flex items-center gap-3">
                                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-900">
                                     <svg
                                         className="h-6 w-6 text-white"
@@ -1130,7 +1130,7 @@ export default function CleanPastePage() {
                                 <ul className="space-y-2">
                                     <li>
                                         <Link
-                                            href="/terms"
+                                            href="#"
                                             className="text-neutral-600 transition-colors hover:text-neutral-900"
                                         >
                                             Terms of Service
@@ -1138,7 +1138,7 @@ export default function CleanPastePage() {
                                     </li>
                                     <li>
                                         <Link
-                                            href="/privacy"
+                                            href="#"
                                             className="text-neutral-600 transition-colors hover:text-neutral-900"
                                         >
                                             Privacy Policy
