@@ -1150,7 +1150,7 @@ export default function CleanPastePage() {
 
                         <div className="mt-12 border-t border-neutral-200 pt-8">
                             <p className="text-center text-sm text-neutral-500">
-                                © 2025 Vertex Media Corporation. All rights reserved.
+                                © 2025 Oleksandr Bunin. All rights reserved :)
                             </p>
                         </div>
                     </div>
