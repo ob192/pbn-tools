@@ -1,0 +1,206 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS Variables */
+:root {
+    --font-inter: system-ui, sans-serif;
+    --font-space: system-ui, sans-serif;
+}
+
+/* Default body font */
+body {
+    font-family: var(--font-inter);
+}
+
+/* Headings opt-in class */
+.heading {
+    font-family: var(--font-space);
+}
+
+/* Markdown Prose Styles */
+.prose {
+    @apply text-gray-700;
+}
+
+.prose p {
+    @apply mb-3;
+}
+
+.prose ul,
+.prose ol {
+    @apply mb-3 pl-6;
+}
+
+.prose ul {
+    @apply list-disc;
+}
+
+.prose ol {
+    @apply list-decimal;
+}
+
+.prose li {
+    @apply mb-1;
+}
+
+.prose strong {
+    @apply font-semibold text-gray-900;
+}
+
+.prose em {
+    @apply italic;
+}
+
+.prose a {
+    @apply text-blue-600 hover:text-blue-700 underline;
+}
+
+.prose h1,
+.prose h2,
+.prose h3 {
+    @apply font-bold text-gray-900 mb-2;
+}
+
+.prose h1 {
+    @apply text-2xl;
+}
+
+.prose h2 {
+    @apply text-xl;
+}
+
+.prose h3 {
+    @apply text-lg;
+}
+
+.prose code {
+    @apply bg-gray-100 px-1 py-0.5 rounded text-sm font-mono;
+}
+
+.prose pre {
+    @apply bg-gray-100 p-3 rounded overflow-x-auto mb-3;
+}
+
+.prose blockquote {
+    @apply border-l-4 border-gray-300 pl-4 italic my-3;
+}
+
+/* Print Styles */
+@media print {
+    @page {
+        size: A4;
+        margin: 0;
+    }
+
+    body {
+        @apply bg-white;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+
+    .print-document {
+        @apply shadow-none;
+        page-break-inside: avoid;
+    }
+
+    /* Hide non-essential elements when printing */
+    nav,
+    button,
+    .no-print,
+    header,
+    footer {
+        @apply hidden !important;
+    }
+
+    /* Ensure colors are preserved */
+    * {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+
+    /* Better page breaks */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        page-break-after: avoid;
+        page-break-inside: avoid;
+    }
+
+    p,
+    li {
+        page-break-inside: avoid;
+    }
+
+    img {
+        page-break-inside: avoid;
+    }
+}
+
+/* PDF Export Optimization */
+.print-document {
+    @apply break-inside-avoid;
+}
+
+.print-document h1,
+.print-document h2,
+.print-document h3 {
+    @apply break-after-avoid;
+}
+
+/* Ensure content fits properly in PDF */
+.pdf-content {
+    max-width: 100%;
+    overflow: hidden;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus visible styles for keyboard navigation */
+*:focus-visible {
+    @apply outline-2 outline-offset-2 outline-blue-600;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-gray-400 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500;
+}
+
+/* Selection color */
+::selection {
+    @apply bg-emerald-200 text-gray-900;
+}
+
+::-moz-selection {
+    @apply bg-emerald-200 text-gray-900;
+}
+
+.input {
+    @apply w-full px-4 py-3 rounded-lg border border-gray-300
+    focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+}
