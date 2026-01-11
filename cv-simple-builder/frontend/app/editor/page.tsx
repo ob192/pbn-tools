@@ -17,6 +17,13 @@ import {gaEvent} from '@/lib/ga';
 
 export default function EditorPage() {
 
+    useEffect(() => {
+        gaEvent({
+            action: 'editor_started',
+            category: 'funnel',
+            label: 'editor_open',
+        });
+    }, []);
     const [currentStep, setCurrentStep] = useState(1);
     useEffect(() => {
         gaEvent({
