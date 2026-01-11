@@ -11,9 +11,22 @@ import {StylingStep} from '@/editor/steps/StylingStep';
 import {MainContentStep} from '@/editor/steps/MainContentStep';
 import {useResumeStore} from '@/store/useResumeStore';
 import {COMMON_CONTACT_TYPES} from '@/core/resume/defaults';
+import {useEffect} from 'react';
+import {gaEvent} from '@/lib/ga';
+
 
 export default function EditorPage() {
+
     const [currentStep, setCurrentStep] = useState(1);
+    useEffect(() => {
+        gaEvent({
+            action: 'editor_step_viewed',
+            category: 'editor',
+            label: `step_${currentStep}`,
+            value: currentStep,
+        });
+    }, [currentStep]);
+
     const {resume, addContact} = useResumeStore();
 
     const totalSteps = 4;

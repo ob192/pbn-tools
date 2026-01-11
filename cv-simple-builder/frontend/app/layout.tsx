@@ -1,6 +1,8 @@
-import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import type {Metadata} from "next";
+import {Inter, Space_Grotesk} from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
+
 
 const inter = Inter({
     subsets: ["latin"],
@@ -41,7 +43,7 @@ export const metadata: Metadata = {
         "markdown to pdf resume",
         "ats resume builder",
     ],
-    authors: [{ name: "Markdown CV Builder" }],
+    authors: [{name: "Markdown CV Builder"}],
     creator: "Markdown CV Builder",
     publisher: "Markdown CV Builder",
     formatDetection: {
@@ -107,17 +109,33 @@ export default function RootLayout({
             className={`${inter.variable} ${spaceGrotesk.variable}`}
         >
         <head>
-            <link rel="icon" href="/favicon.ico" sizes="any" />
-            <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-            <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-            <link rel="manifest" href="/manifest.json" />
-            <meta name="theme-color" content="#10b981" />
-            <meta name="mobile-web-app-capable" content="yes" />
-            <meta name="apple-mobile-web-app-capable" content="yes" />
+            <link rel="icon" href="/favicon.ico" sizes="any"/>
+            <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
+            <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+            <link rel="manifest" href="/manifest.json"/>
+            <meta name="theme-color" content="#10b981"/>
+            <meta name="mobile-web-app-capable" content="yes"/>
+            <meta name="apple-mobile-web-app-capable" content="yes"/>
             <meta
                 name="apple-mobile-web-app-status-bar-style"
                 content="default"
             />
+            <head>
+                {/* Google tag (gtag.js) */}
+                <Script
+                    async
+                    src="https://www.googletagmanager.com/gtag/js?id=G-3WGLQKZJCR"
+                />
+                <Script id="gtag-init">
+                    {`
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-3WGLQKZJCR');
+    `}
+                </Script>
+            </head>
+
         </head>
         <body className="bg-white text-gray-900 antialiased">
         {children}

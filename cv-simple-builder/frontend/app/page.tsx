@@ -97,7 +97,7 @@ export default function HomePage() {
                         or complicate writing your CV.
                     </p>
 
-                    <div className="space-y-8 text-lg sm:text-xl text-gray-700">
+                    <div className="space-y-8 text-lg sm:texta-xl text-gray-700">
                         <div>
                             <p className="font-medium text-gray-900">
                                 Personal branding options
