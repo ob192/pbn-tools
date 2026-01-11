@@ -5,11 +5,66 @@ import { BulletStyle, HeadingStyle } from '@/core/resume/types';
 import { COLOR_PALETTES, SEPARATOR_OPTIONS } from '@/core/resume/defaults';
 import { Palette, Type, List, Minus } from 'lucide-react';
 
+/* -----------------------------
+   Reusable Color Picker
+------------------------------ */
+function ColorPicker({
+                         label,
+                         value,
+                         onChange,
+                     }: {
+    label: string;
+    value: string;
+    onChange: (value: string) => void;
+}) {
+    return (
+        <div>
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {label}
+                </label>
+
+                <div className="flex gap-2 items-center min-w-0">
+                    {/* Color swatch */}
+                    <label className="relative w-12 h-10 cursor-pointer flex-shrink-0">
+                        <input
+                            type="color"
+                            value={value}
+                            onChange={(e) => onChange(e.target.value)}
+                            className="absolute inset-0 opacity-0 cursor-pointer"
+                        />
+                        <div
+                            className="w-12 h-10 rounded border border-gray-300"
+                            style={{ backgroundColor: value }}
+                        />
+                    </label>
+
+                    {/* Hex input */}
+                    <input
+                        type="text"
+                        value={value}
+                        onChange={(e) => onChange(e.target.value)}
+                        className="h-10 min-w-0 flex-1 px-3 border border-gray-300 rounded-lg font-mono text-sm"
+                        placeholder="#000000"
+                    />
+                </div>
+            </div>
+        </div>
+    );
+}
+
+/* -----------------------------
+   Main Component
+------------------------------ */
 export function StylingStep() {
     const { resume, setStyleSettings } = useResumeStore();
     const { styleSettings } = resume;
 
-    const headingStyles: { value: HeadingStyle; label: string; preview: string }[] = [
+    const headingStyles: {
+        value: HeadingStyle;
+        label: string;
+        preview: string;
+    }[] = [
         { value: 'bold', label: 'Bold', preview: 'Professional Experience' },
         { value: 'bold-underline', label: 'Bold + Underline', preview: 'Professional Experience' },
         { value: 'bold-border', label: 'Bold + Thick Border', preview: 'Professional Experience' },
@@ -32,6 +87,7 @@ export function StylingStep() {
 
     return (
         <div>
+            {/* Header */}
             <div className="flex items-center gap-3 mb-2">
                 <Palette className="text-blue-600" size={28} />
                 <h2 className="text-2xl font-bold text-gray-900">
@@ -39,7 +95,7 @@ export function StylingStep() {
                 </h2>
             </div>
             <p className="text-gray-600 mb-8">
-                Personalize your CV's appearance with colors and formatting
+                Personalize your CV&apos;s appearance with colors and formatting
             </p>
 
             <div className="space-y-8">
@@ -49,16 +105,19 @@ export function StylingStep() {
                         <Palette size={20} className="text-gray-600" />
                         Color Palette
                     </h3>
+
                     <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         {COLOR_PALETTES.map((palette) => (
                             <button
                                 key={palette.name}
-                                onClick={() => setStyleSettings({
-                                    headingColor: palette.headingColor,
-                                    subheadingColor: palette.subheadingColor,
-                                    accentColor: palette.accentColor,
-                                    bulletColor: palette.bulletColor,
-                                })}
+                                onClick={() =>
+                                    setStyleSettings({
+                                        headingColor: palette.headingColor,
+                                        subheadingColor: palette.subheadingColor,
+                                        accentColor: palette.accentColor,
+                                        bulletColor: palette.bulletColor,
+                                    })
+                                }
                                 className={`p-4 border-2 rounded-lg transition-all text-left ${
                                     styleSettings.headingColor === palette.headingColor
                                         ? 'border-blue-600 bg-blue-50'
@@ -68,27 +127,12 @@ export function StylingStep() {
                                 <div className="font-semibold text-gray-900 mb-3">
                                     {palette.name}
                                 </div>
+
                                 <div className="flex gap-2">
-                                    <div
-                                        className="w-8 h-8 rounded"
-                                        style={{ backgroundColor: palette.headingColor }}
-                                        title="Heading"
-                                    />
-                                    <div
-                                        className="w-8 h-8 rounded"
-                                        style={{ backgroundColor: palette.subheadingColor }}
-                                        title="Subheading"
-                                    />
-                                    <div
-                                        className="w-8 h-8 rounded"
-                                        style={{ backgroundColor: palette.accentColor }}
-                                        title="Accent"
-                                    />
-                                    <div
-                                        className="w-8 h-8 rounded"
-                                        style={{ backgroundColor: palette.bulletColor }}
-                                        title="Bullets"
-                                    />
+                                    <div className="w-8 h-8 rounded" style={{ backgroundColor: palette.headingColor }} />
+                                    <div className="w-8 h-8 rounded" style={{ backgroundColor: palette.subheadingColor }} />
+                                    <div className="w-8 h-8 rounded" style={{ backgroundColor: palette.accentColor }} />
+                                    <div className="w-8 h-8 rounded" style={{ backgroundColor: palette.bulletColor }} />
                                 </div>
                             </button>
                         ))}
@@ -100,90 +144,28 @@ export function StylingStep() {
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">
                         Custom Colors
                     </h3>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Heading Color
-                            </label>
-                            <div className="flex gap-2">
-                                <input
-                                    type="color"
-                                    value={styleSettings.headingColor}
-                                    onChange={(e) => setStyleSettings({ headingColor: e.target.value })}
-                                    className="w-12 h-10 rounded border border-gray-300 cursor-pointer"
-                                />
-                                <input
-                                    type="text"
-                                    value={styleSettings.headingColor}
-                                    onChange={(e) => setStyleSettings({ headingColor: e.target.value })}
-                                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg font-mono text-sm"
-                                    placeholder="#000000"
-                                />
-                            </div>
-                        </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Subheading Color
-                            </label>
-                            <div className="flex gap-2">
-                                <input
-                                    type="color"
-                                    value={styleSettings.subheadingColor}
-                                    onChange={(e) => setStyleSettings({ subheadingColor: e.target.value })}
-                                    className="w-12 h-10 rounded border border-gray-300 cursor-pointer"
-                                />
-                                <input
-                                    type="text"
-                                    value={styleSettings.subheadingColor}
-                                    onChange={(e) => setStyleSettings({ subheadingColor: e.target.value })}
-                                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg font-mono text-sm"
-                                    placeholder="#000000"
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Accent Color
-                            </label>
-                            <div className="flex gap-2">
-                                <input
-                                    type="color"
-                                    value={styleSettings.accentColor}
-                                    onChange={(e) => setStyleSettings({ accentColor: e.target.value })}
-                                    className="w-12 h-10 rounded border border-gray-300 cursor-pointer"
-                                />
-                                <input
-                                    type="text"
-                                    value={styleSettings.accentColor}
-                                    onChange={(e) => setStyleSettings({ accentColor: e.target.value })}
-                                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg font-mono text-sm"
-                                    placeholder="#000000"
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Bullet Color
-                            </label>
-                            <div className="flex gap-2">
-                                <input
-                                    type="color"
-                                    value={styleSettings.bulletColor}
-                                    onChange={(e) => setStyleSettings({ bulletColor: e.target.value })}
-                                    className="w-12 h-10 rounded border border-gray-300 cursor-pointer"
-                                />
-                                <input
-                                    type="text"
-                                    value={styleSettings.bulletColor}
-                                    onChange={(e) => setStyleSettings({ bulletColor: e.target.value })}
-                                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg font-mono text-sm"
-                                    placeholder="#000000"
-                                />
-                            </div>
-                        </div>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
+                        <ColorPicker
+                            label="Heading Color"
+                            value={styleSettings.headingColor}
+                            onChange={(v) => setStyleSettings({ headingColor: v })}
+                        />
+                        <ColorPicker
+                            label="Subheading Color"
+                            value={styleSettings.subheadingColor}
+                            onChange={(v) => setStyleSettings({ subheadingColor: v })}
+                        />
+                        <ColorPicker
+                            label="Accent Color"
+                            value={styleSettings.accentColor}
+                            onChange={(v) => setStyleSettings({ accentColor: v })}
+                        />
+                        <ColorPicker
+                            label="Bullet Color"
+                            value={styleSettings.bulletColor}
+                            onChange={(v) => setStyleSettings({ bulletColor: v })}
+                        />
                     </div>
                 </div>
 
@@ -193,6 +175,7 @@ export function StylingStep() {
                         <Minus size={20} className="text-gray-600" />
                         Contact Separator
                     </h3>
+
                     <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
                         {SEPARATOR_OPTIONS.map((option) => (
                             <button
@@ -205,85 +188,8 @@ export function StylingStep() {
                                 }`}
                             >
                                 <div className="text-2xl text-center mb-1">{option.value}</div>
-                                <div className="text-xs text-gray-600 text-center">{option.label}</div>
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Heading Style */}
-                <div className="pt-6 border-t">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                        <Type size={20} className="text-gray-600" />
-                        Main Heading Style (H2)
-                    </h3>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {headingStyles.map((style) => (
-                            <button
-                                key={style.value}
-                                onClick={() => setStyleSettings({ headingStyle: style.value })}
-                                className={`p-4 border-2 rounded-lg transition-all text-left ${
-                                    styleSettings.headingStyle === style.value
-                                        ? 'border-blue-600 bg-blue-50'
-                                        : 'border-gray-200 hover:border-gray-300'
-                                }`}
-                            >
-                                <div className="text-sm font-medium text-gray-600 mb-2">
-                                    {style.label}
-                                </div>
-                                <div
-                                    className={`text-lg ${
-                                        style.value === 'bold' ? 'font-bold' :
-                                            style.value === 'bold-underline' ? 'font-bold border-b-2 pb-1' :
-                                                style.value === 'bold-border' ? 'font-bold border-b-4 pb-2' :
-                                                    style.value === 'bold-background' ? 'font-bold px-2 py-1 -mx-2 rounded bg-gray-100' :
-                                                        'font-bold uppercase tracking-wider text-sm'
-                                    }`}
-                                    style={{
-                                        color: styleSettings.headingColor,
-                                        borderColor: styleSettings.headingColor
-                                    }}
-                                >
-                                    {style.preview}
-                                </div>
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Subheading Style */}
-                <div className="pt-6 border-t">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                        Subheading Style (H3)
-                    </h3>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {headingStyles.map((style) => (
-                            <button
-                                key={style.value}
-                                onClick={() => setStyleSettings({ subheadingStyle: style.value })}
-                                className={`p-4 border-2 rounded-lg transition-all text-left ${
-                                    styleSettings.subheadingStyle === style.value
-                                        ? 'border-blue-600 bg-blue-50'
-                                        : 'border-gray-200 hover:border-gray-300'
-                                }`}
-                            >
-                                <div className="text-sm font-medium text-gray-600 mb-2">
-                                    {style.label}
-                                </div>
-                                <div
-                                    className={`text-base ${
-                                        style.value === 'bold' ? 'font-bold' :
-                                            style.value === 'bold-underline' ? 'font-bold border-b-2 pb-1' :
-                                                style.value === 'bold-border' ? 'font-bold border-b-4 pb-2' :
-                                                    style.value === 'bold-background' ? 'font-bold px-2 py-1 -mx-2 rounded bg-gray-100' :
-                                                        'font-bold uppercase tracking-wider text-xs'
-                                    }`}
-                                    style={{
-                                        color: styleSettings.subheadingColor,
-                                        borderColor: styleSettings.subheadingColor
-                                    }}
-                                >
-                                    {style.preview}
+                                <div className="text-xs text-gray-600 text-center">
+                                    {option.label}
                                 </div>
                             </button>
                         ))}
@@ -296,6 +202,7 @@ export function StylingStep() {
                         <List size={20} className="text-gray-600" />
                         Bullet Point Style
                     </h3>
+
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
                         {bulletStyles.map((style) => (
                             <button
@@ -307,7 +214,10 @@ export function StylingStep() {
                                         : 'border-gray-200 hover:border-gray-300'
                                 }`}
                             >
-                                <div className="text-3xl text-center mb-2" style={{ color: styleSettings.bulletColor }}>
+                                <div
+                                    className="text-3xl text-center mb-2"
+                                    style={{ color: styleSettings.bulletColor }}
+                                >
                                     {style.char}
                                 </div>
                                 <div className="text-sm font-medium text-gray-700 text-center">
