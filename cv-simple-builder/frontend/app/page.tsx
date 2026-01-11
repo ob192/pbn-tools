@@ -85,7 +85,80 @@ export default function HomePage() {
                     </div>
                 </section>
 
-                {/* FAQ */}
+                {/* ROADMAP / COMING SOON */}
+                <section className="border-t border-gray-200 pt-20 mb-24">
+                    <h2 className="heading text-2xl sm:text-3xl font-semibold mb-10">
+                        What’s coming next
+                    </h2>
+
+                    <p className="text-lg sm:text-xl text-gray-700 max-w-xl mb-12">
+                        This tool will always stay simple, fast, and ATS-first.
+                        New features are added only if they don’t slow you down
+                        or complicate writing your CV.
+                    </p>
+
+                    <div className="space-y-8 text-lg sm:text-xl text-gray-700">
+                        <div>
+                            <p className="font-medium text-gray-900">
+                                Personal branding options
+                            </p>
+                            <p>
+                                Add custom footer text, subtle branding, or personal links
+                                without breaking ATS compatibility.
+                            </p>
+                        </div>
+
+                        <div>
+                            <p className="font-medium text-gray-900">
+                                More ATS-friendly templates
+                            </p>
+                            <p>
+                                Additional clean, lightweight layouts — all single-column,
+                                readable, and built for parsing accuracy.
+                            </p>
+                        </div>
+
+                        <div>
+                            <p className="font-medium text-gray-900">
+                                Portfolio integration
+                            </p>
+                            <p>
+                                Attach work samples (images or PDFs) and display GitHub or
+                                LinkedIn badges alongside your CV.
+                            </p>
+                        </div>
+
+                        <div>
+                            <p className="font-medium text-gray-900">
+                                Enhanced styling
+                            </p>
+                            <p>
+                                Optional Google Fonts integration for typography customization
+                                while keeping exports clean and professional.
+                            </p>
+                        </div>
+
+                        <div>
+                            <p className="font-medium text-gray-900">
+                                More export options
+                            </p>
+                            <p>
+                                Export your CV as HTML or DOCX in addition to PDF.
+                            </p>
+                        </div>
+
+                        <div>
+                            <p className="font-medium text-gray-900">
+                                AI-powered tools
+                            </p>
+                            <p>
+                                Job-specific cover letter generator, ATS compatibility checker,
+                                and job match score based on your resume content.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
                 {/* FAQ */}
                 <section className="border-t border-gray-200 pt-20">
                     <h2 className="heading text-2xl sm:text-3xl font-semibold mb-12">
@@ -158,11 +231,12 @@ export default function HomePage() {
                                     </>
                                 ),
                             },
-                        ].map(({ q, a }) => (
+                        ].map(({q, a}) => (
                             <details key={q} className="group">
-                                <summary className="flex cursor-pointer items-center justify-between text-lg sm:text-xl font-medium">
+                                <summary
+                                    className="flex cursor-pointer items-center justify-between text-lg sm:text-xl font-medium">
                                     {q}
-                                    <ChevronDown className="text-gray-400 transition group-open:rotate-180" />
+                                    <ChevronDown className="text-gray-400 transition group-open:rotate-180"/>
                                 </summary>
 
                                 <div className="mt-5 text-base sm:text-lg text-gray-700 leading-relaxed max-w-2xl">
@@ -172,7 +246,6 @@ export default function HomePage() {
                         ))}
                     </div>
                 </section>
-
 
                 {/* FOOTER CTA */}
                 <footer className="mt-24 text-center">
