@@ -46,7 +46,7 @@ export interface StyleSettings {
     subheadingColor: string;
     accentColor: string;
     bulletColor: string;
-    contactSeparator: string; // Moved from layoutSettings
+    contactSeparator: string;
 }
 
 export interface ResumeData {

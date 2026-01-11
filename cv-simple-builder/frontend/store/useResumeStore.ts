@@ -8,7 +8,6 @@ import {
     ContactItem,
     ContentMode,
     StyleSettings,
-    LayoutSettings
 } from '@/core/resume/types';
 import { DEFAULT_RESUME } from '@/core/resume/defaults';
 
@@ -36,7 +35,6 @@ interface ResumeStore {
     syncMarkdownToForm: () => void;
     syncFormToMarkdown: () => void;
     setStyleSettings: (settings: Partial<StyleSettings>) => void;
-    setLayoutSettings: (settings: Partial<LayoutSettings>) => void;
 }
 
 // Helper functions remain the same...
@@ -370,14 +368,4 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
                 styleSettings: { ...state.resume.styleSettings, ...settings }
             },
         })),
-
-// Add to store implementation:
-    setLayoutSettings: (settings) =>
-        set((state) => ({
-            resume: {
-                ...state.resume,
-                layoutSettings: { ...state.resume.layoutSettings, ...settings }
-            },
-        })),
-
 }));
