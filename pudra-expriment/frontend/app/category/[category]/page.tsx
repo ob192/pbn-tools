@@ -106,14 +106,14 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                                 </span>
                                 <span className="text-xs text-muted-foreground">Products</span>
                             </div>
-                            {stats?.avgWholesale && (
-                                <div className="flex flex-col items-center rounded-lg bg-muted px-4 py-2">
-                                    <span className="text-2xl font-bold">
-                                        ${Number(stats.avgWholesale).toFixed(2)}
-                                    </span>
-                                    <span className="text-xs text-muted-foreground">Avg Price</span>
-                                </div>
-                            )}
+                            {/*{stats?.avgWholesale && (*/}
+                            {/*    <div className="flex flex-col items-center rounded-lg bg-muted px-4 py-2">*/}
+                            {/*        <span className="text-2xl font-bold">*/}
+                            {/*            ${Number(stats.avgWholesale).toFixed(2)}*/}
+                            {/*        </span>*/}
+                            {/*        <span className="text-xs text-muted-foreground">Середня ціна</span>*/}
+                            {/*    </div>*/}
+                            {/*)}*/}
                         </div>
                     </div>
                 </div>

@@ -201,9 +201,9 @@ export function ProductTable({ products, columns, categoryName, totalCount }: Pr
                                     </TableHead>
                                 )}
                                 <TableHead className="min-w-[200px]">Назва товару</TableHead>
-                                <TableHead className="w-32 text-right">Гурт</TableHead>
+                                <TableHead className="w-32 text-right">ОПТ</TableHead>
                                 <TableHead className="w-32 text-right">Дроп</TableHead>
-                                <TableHead className="w-24 text-center">Маржа</TableHead>
+                                {/*<TableHead className="w-24 text-center">Дисконт</TableHead>*/}
                                 <TableHead className="min-w-[250px]">Опис</TableHead>
                                 <TableHead className="w-36 text-center">Google Drive</TableHead>
                                 <TableHead className="w-32 text-center">Дія</TableHead>
@@ -213,7 +213,7 @@ export function ProductTable({ products, columns, categoryName, totalCount }: Pr
                             {filteredProducts.map((product, index) => {
                                 const wholesale = toNumber(product.priceWholesale);
                                 const drop = toNumber(product.priceDrop);
-                                const margin = calculateDiscount(wholesale, drop);
+                                // const margin = calculateDiscount(wholesale, drop);
                                 const isExpanded = expandedRows.has(index);
                                 const hasExtraData = extraColumns.length > 0;
 
@@ -254,17 +254,17 @@ export function ProductTable({ products, columns, categoryName, totalCount }: Pr
                                                 </span>
                                             </TableCell>
 
-                                            <TableCell className="text-center">
-                                                {margin > 0 && (
-                                                    <Badge
-                                                        variant={
-                                                            margin >= 50 ? "success" : margin >= 30 ? "secondary" : "outline"
-                                                        }
-                                                    >
-                                                        {margin}%
-                                                    </Badge>
-                                                )}
-                                            </TableCell>
+                                            {/*<TableCell className="text-center">*/}
+                                            {/*    {margin > 0 && (*/}
+                                            {/*        <Badge*/}
+                                            {/*            variant={*/}
+                                            {/*                margin >= 50 ? "success" : margin >= 30 ? "secondary" : "outline"*/}
+                                            {/*            }*/}
+                                            {/*        >*/}
+                                            {/*            {margin}%*/}
+                                            {/*        </Badge>*/}
+                                            {/*    )}*/}
+                                            {/*</TableCell>*/}
 
                                             <TableCell>
                                                 <p className="text-sm text-muted-foreground line-clamp-2">
