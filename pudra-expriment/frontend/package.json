@@ -4,13 +4,24 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "db:seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts",
+    "db:reset": "prisma migrate reset"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
+    "@prisma/client": "6.9.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "idb": "^8.0.3",
     "lucide-react": "^0.363.0",
     "next": "14.2.0",
     "papaparse": "^5.4.1",
@@ -20,6 +31,7 @@
     "transliteration": "^2.6.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.2.0",
     "@types/node": "^20.11.0",
     "@types/papaparse": "^5.3.14",
     "@types/react": "^18.2.0",
@@ -28,7 +40,9 @@
     "eslint": "^8.56.0",
     "eslint-config-next": "14.2.0",
     "postcss": "^8.4.35",
+    "prisma": "6.9.0",
     "tailwindcss": "^3.4.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.0"
   }
 }

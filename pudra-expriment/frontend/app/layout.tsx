@@ -1,35 +1,45 @@
+// app/layout.tsx (оновлена версія)
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { CartProvider } from "@/lib/cart-context";
+import { CartDrawer } from "@/components/cart-drawer";
 
-const inter = Inter({ subsets: ["latin"] });
+
+const inter = Inter({ subsets: ["latin", "cyrillic"] });
 
 export const metadata: Metadata = {
-    title: "B2B Product Catalog | Wholesale Products",
-    description: "Browse our comprehensive catalog of wholesale products with competitive pricing for B2B buyers.",
-    keywords: ["wholesale", "B2B", "catalog", "products", "bulk pricing"],
+    title: "PUDRA — Каталог для партнерів | Безшовна білизна, лосини, комбінезони",
+    description: "B2B каталог PUDRA Чернігів. Безшовна білизна, лосини, комбінезони, термобілизна за гуртовими цінами. Безкоштовна доставка від 3000₴.",
+    keywords: ["безшовна білизна", "лосини", "комбінезони", "термобілизна", "гурт", "Чернігів", "PUDRA"],
+    openGraph: {
+        title: "PUDRA — Каталог для партнерів",
+        description: "Безшовна білизна • лосини • комбінезони • термобілизна",
+        url: "https://www.instagram.com/pudra_chernihiv/",
+        siteName: "PUDRA",
+        locale: "uk_UA",
+        type: "profile",
+    },
 };
 
-/**
- * Root layout component
- * Wraps all pages with header and footer
- * Server Component - renders at build time
- */
 export default function RootLayout({
                                        children,
                                    }: {
     children: React.ReactNode;
 }) {
     return (
-        <html lang="en" className="scroll-smooth">
+        <html lang="uk" className="scroll-smooth">
         <body className={`${inter.className} min-h-screen flex flex-col antialiased`}>
-        <Header />
-        <main className="flex-1">
-            {children}
-        </main>
-        <Footer />
+        <CartProvider>
+            <Header />
+            <main className="flex-1">
+                {children}
+            </main>
+            <Footer />
+            <CartDrawer />
+        </CartProvider>
         </body>
         </html>
     );

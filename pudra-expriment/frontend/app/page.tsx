@@ -1,14 +1,12 @@
-import { ArrowDown, ArrowRight, Package, TrendingUp, Shield, Truck, Instagram } from "lucide-react";
+// app/page.tsx
+import { ArrowDown, Package, TrendingUp, Shield, Truck, Instagram } from "lucide-react";
 import { CategoryCard } from "@/components/category-card";
-import { getCategories } from "@/lib/data-loader";
-import { Button } from "@/components/ui/button";
+import { getCategories } from "@/lib/data-service";
 
-/**
- * Головна сторінка — показує всі категорії
- * Server Component — дані завантажуються під час білду
- */
-export default function HomePage() {
-    const categories = getCategories();
+export const revalidate = 3600;
+
+export default async function HomePage() {
+    const categories = await getCategories();
 
     return (
         <div className="min-h-screen">
@@ -33,29 +31,35 @@ export default function HomePage() {
                         </h1>
 
                         {/* Subtitle */}
-                        <p className="mb-10 text-lg text-muted-foreground sm:text-xl">
-                            Каталог для B2B. Швидка доставка. Надійний сервіс.
+                        <p className="mb-4 text-lg text-muted-foreground sm:text-xl">
+                            безшовна білизна • лосини • комбінезони • термобілизна
+                        </p>
+                        <p className="mb-10 text-base text-muted-foreground">
+                            Безкоштовна доставка від 3000₴ • Відправка в день оплати 🚘
                         </p>
 
                         {/* Instagram CTA */}
-                        <div className="flex justify-center">
-                            <Button
-                                size="lg"
-                                className="text-lg gap-2"
-                                asChild
+                        <div className="flex justify-center gap-4">
+                            <a
+                                href="https://www.instagram.com/pudra_chernihiv/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center gap-2 rounded-md bg-gradient-to-r from-pink-500 to-purple-600 px-8 py-3 text-lg font-medium text-white shadow-lg transition-all hover:shadow-xl hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500"
                             >
-                                <a
-                                    href="https://instagram.com/your_instagram"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    <Instagram className="h-5 w-5" />
-                                    Написати в Instagram
-                                </a>
-                            </Button>
+                                <Instagram className="h-5 w-5" />
+                                Instagram
+                            </a>
+                            <a
+                                href="https://www.threads.com/@pudra_chernihiv"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center gap-2 rounded-md border border-input bg-background px-8 py-3 text-lg font-medium shadow transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                            >
+                                Threads
+                            </a>
                         </div>
 
-                        {/* Scroll hint (mobile only) */}
+                        {/* Scroll hint */}
                         <div className="mt-12 flex flex-col items-center gap-2 text-muted-foreground sm:hidden animate-bounce">
                             <span className="text-sm">Пролистніть вниз</span>
                             <ArrowDown className="h-5 w-5" />
@@ -81,12 +85,12 @@ export default function HomePage() {
                         <Feature
                             icon={<Truck className="h-6 w-6" />}
                             title="Швидка доставка"
-                            text="Оперативна відправка"
+                            text="Відправка в день оплати"
                         />
                         <Feature
                             icon={<Package className="h-6 w-6" />}
                             title="Широкий вибір"
-                            text={`${categories.length} категорій`}
+                            text={`${categories.length} категорій товарів`}
                         />
                     </div>
                 </div>
@@ -108,7 +112,7 @@ export default function HomePage() {
                         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                             {categories.map((category) => (
                                 <CategoryCard
-                                    key={category.slug}
+                                    key={category.id}
                                     category={category}
                                 />
                             ))}
@@ -127,16 +131,7 @@ export default function HomePage() {
     );
 }
 
-/* Helper component */
-function Feature({
-                     icon,
-                     title,
-                     text,
-                 }: {
-    icon: React.ReactNode;
-    title: string;
-    text: string;
-}) {
+function Feature({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
     return (
         <div className="flex items-start gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">

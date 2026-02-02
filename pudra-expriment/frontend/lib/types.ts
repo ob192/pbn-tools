@@ -1,26 +1,27 @@
-/**
- * Represents a single product with dynamic fields
- */
-export interface Product {
-    // Required core fields
-    productName: string;
-    priceWholesale: string | number;
-    priceDrop: string | number;
-    description: string;
-    googleDriveUrl: string;
+// lib/types.ts
+import {
+    Product as PrismaProduct,
+    Category as PrismaCategory,
+    FieldType,
+    Prisma
+} from '@prisma/client';
 
-    // Allow any additional dynamic fields
-    [key: string]: string | number | undefined;
+/**
+ * Extended Product type with category relation
+ */
+export interface Product extends Omit<PrismaProduct, 'extraFields'> {
+    category?: Category;
+    extraFields?: Prisma.JsonValue | null;
 }
 
 /**
- * Represents a category containing products
+ * Extended Category type with product count
  */
-export interface Category {
-    name: string;
-    originalName: string;
-    slug: string;
-    productCount: number;
+export interface Category extends PrismaCategory {
+    productCount?: number;
+    _count?: {
+        products: number;
+    };
 }
 
 /**
@@ -29,5 +30,43 @@ export interface Category {
 export interface ColumnDefinition {
     key: string;
     label: string;
-    type: "text" | "price" | "url" | "number";
+    type: 'text' | 'price' | 'url' | 'number' | 'date';
+    order?: number;
+}
+
+/**
+ * Product with dynamic fields flattened
+ */
+export interface ProductWithFields extends Omit<PrismaProduct, 'extraFields' | 'priceWholesale' | 'priceDrop'> {
+    priceWholesale: number | Prisma.Decimal;
+    priceDrop: number | Prisma.Decimal;
+    [key: string]: any; // Allow dynamic fields
+}
+
+/**
+ * Filter options for products
+ */
+export interface ProductFilters {
+    categoryId?: string;
+    search?: string;
+    isActive?: boolean;
+    minPrice?: number;
+    maxPrice?: number;
+}
+
+/**
+ * Pagination options
+ */
+export interface PaginationOptions {
+    page?: number;
+    pageSize?: number;
+    sortBy?: string;
+    sortOrder?: 'asc' | 'desc';
+}
+
+/**
+ * Type guard for checking if value is a Record
+ */
+export function isRecord(value: unknown): value is Record<string, any> {
+    return typeof value === 'object' && value !== null && !Array.isArray(value);
 }

@@ -1,9 +1,7 @@
-import { Package2 } from "lucide-react";
+// components/footer.tsx
+import Link from "next/link";
+import { Package2, Instagram, MapPin, Clock } from "lucide-react";
 
-/**
- * Site footer with company info
- * Server Component - renders at build time
- */
 export function Footer() {
     const currentYear = new Date().getFullYear();
 
@@ -15,47 +13,86 @@ export function Footer() {
                     <div className="space-y-4">
                         <div className="flex items-center gap-2 font-bold text-lg">
                             <Package2 className="h-5 w-5 text-primary" />
-                            <span>B2B Catalog</span>
+                            <span className="bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
+                                PUDRA
+                            </span>
                         </div>
                         <p className="text-sm text-muted-foreground">
-                            Your trusted wholesale partner for quality products at competitive prices.
+                            Безшовна білизна • лосини • комбінезони • термобілизна
                         </p>
+                        <a
+                            href="https://www.instagram.com/pudra_chernihiv/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
+                        >
+                            <Instagram className="h-4 w-4" />
+                            @pudra_chernihiv
+                        </a>
                     </div>
 
                     {/* Quick Links */}
                     <div className="space-y-4">
-                        <h3 className="font-semibold">Quick Links</h3>
+                        <h3 className="font-semibold">Навігація</h3>
                         <ul className="space-y-2 text-sm text-muted-foreground">
-                            <li><a href="/" className="hover:text-primary transition-colors">Home</a></li>
-                            <li><a href="/" className="hover:text-primary transition-colors">Categories</a></li>
-                            <li><a href="/" className="hover:text-primary transition-colors">New Arrivals</a></li>
-                        </ul>
-                    </div>
-
-                    {/* Support */}
-                    <div className="space-y-4">
-                        <h3 className="font-semibold">Support</h3>
-                        <ul className="space-y-2 text-sm text-muted-foreground">
-                            <li><a href="/" className="hover:text-primary transition-colors">Contact Us</a></li>
-                            <li><a href="/" className="hover:text-primary transition-colors">FAQs</a></li>
-                            <li><a href="/" className="hover:text-primary transition-colors">Shipping Info</a></li>
+                            <li>
+                                <Link href="/" className="hover:text-primary transition-colors">
+                                    Головна
+                                </Link>
+                            </li>
+                            <li>
+                                <a
+                                    href="https://www.instagram.com/pudra_chernihiv/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:text-primary transition-colors"
+                                >
+                                    Instagram
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="https://www.threads.com/@pudra_chernihiv"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:text-primary transition-colors"
+                                >
+                                    Threads
+                                </a>
+                            </li>
                         </ul>
                     </div>
 
                     {/* Contact */}
                     <div className="space-y-4">
-                        <h3 className="font-semibold">Contact</h3>
+                        <h3 className="font-semibold">Контакти</h3>
                         <ul className="space-y-2 text-sm text-muted-foreground">
-                            <li>info@b2bcatalog.com</li>
-                            <li>+1 (555) 123-4567</li>
-                            <li>Mon - Fri: 9AM - 6PM EST</li>
+                            <li className="flex items-start gap-2">
+                                <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                                <span>вул. Полуботка, 12, Чернігів 14000</span>
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <Clock className="h-4 w-4 flex-shrink-0" />
+                                <span>10:00–19:00 щодня</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* Info */}
+                    <div className="space-y-4">
+                        <h3 className="font-semibold">Умови</h3>
+                        <ul className="space-y-2 text-sm text-muted-foreground">
+                            <li>✓ Безкоштовна доставка від 3000₴</li>
+                            <li>✓ Накладений платіж</li>
+                            <li>✓ Можливість обміну</li>
+                            <li>✓ Відправка в день оплати 🚘</li>
                         </ul>
                     </div>
                 </div>
 
                 {/* Copyright */}
                 <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
-                    <p>© {currentYear} B2B Catalog. All rights reserved.</p>
+                    <p>© {currentYear} PUDRA Чернігів. Всі права захищені.</p>
                 </div>
             </div>
         </footer>
