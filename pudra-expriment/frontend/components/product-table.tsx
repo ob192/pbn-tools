@@ -202,7 +202,7 @@ export function ProductTable({ products, columns, categoryName, totalCount }: Pr
                                 )}
                                 <TableHead className="min-w-[200px]">Назва товару</TableHead>
                                 <TableHead className="w-32 text-right">ОПТ</TableHead>
-                                <TableHead className="w-32 text-right">Дроп</TableHead>
+                                {/*<TableHead className="w-32 text-right">Дроп</TableHead>*/}
                                 {/*<TableHead className="w-24 text-center">Дисконт</TableHead>*/}
                                 <TableHead className="min-w-[250px]">Опис</TableHead>
                                 <TableHead className="w-36 text-center">Google Drive</TableHead>
@@ -212,7 +212,7 @@ export function ProductTable({ products, columns, categoryName, totalCount }: Pr
                         <TableBody>
                             {filteredProducts.map((product, index) => {
                                 const wholesale = toNumber(product.priceWholesale);
-                                const drop = toNumber(product.priceDrop);
+                                // const drop = toNumber(product.priceDrop);
                                 // const margin = calculateDiscount(wholesale, drop);
                                 const isExpanded = expandedRows.has(index);
                                 const hasExtraData = extraColumns.length > 0;
@@ -248,11 +248,11 @@ export function ProductTable({ products, columns, categoryName, totalCount }: Pr
                                                 </span>
                                             </TableCell>
 
-                                            <TableCell className="text-right">
-                                                <span className="font-medium text-muted-foreground">
-                                                    {formatCurrency(drop)}
-                                                </span>
-                                            </TableCell>
+                                            {/*<TableCell className="text-right">*/}
+                                            {/*    <span className="font-medium text-muted-foreground">*/}
+                                            {/*        {formatCurrency(drop)}*/}
+                                            {/*    </span>*/}
+                                            {/*</TableCell>*/}
 
                                             {/*<TableCell className="text-center">*/}
                                             {/*    {margin > 0 && (*/}
@@ -300,7 +300,7 @@ export function ProductTable({ products, columns, categoryName, totalCount }: Pr
 
                                         {hasExtraData && isExpanded && (
                                             <TableRow key={`expanded-${product.id}`} className="bg-muted/20">
-                                                <TableCell colSpan={8} className="p-0">
+                                                <TableCell colSpan={7} className="p-0">
                                                     <div className="px-6 py-4 border-t border-dashed">
                                                         <div className="flex items-center gap-2 mb-3">
                                                             <Info className="h-4 w-4 text-primary" />
