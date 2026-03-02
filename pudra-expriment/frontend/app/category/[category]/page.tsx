@@ -10,13 +10,18 @@ import {
     getProductsByCategory,
     getColumnDefinitions,
     getCategoryStats,
-} from "@/lib/data-service"; // ⬅️ CHANGE THIS from data-loader to data-service
+} from "@/lib/data-service";
+import {cn} from "@/lib/utils";
 
 interface CategoryPageProps {
     params: {
         category: string;
     };
+    searchParams: {
+        page?: string;
+    };
 }
+
 
 // Revalidate every hour
 export const revalidate = 3600;
@@ -35,7 +40,7 @@ export async function generateStaticParams() {
 /**
  * Generate metadata for SEO
  */
-export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: CategoryPageProps): Promise<Metadata> {
     const category = await getCategoryBySlug(params.category);
 
     if (!category) {
@@ -53,19 +58,24 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 /**
  * Category page - displays all products in a table with search
  */
-export default async function CategoryPage({ params }: CategoryPageProps) {
+export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
     const category = await getCategoryBySlug(params.category);
 
     if (!category) {
         notFound();
     }
 
+    const page = parseInt(searchParams.page || '1', 10);
+    const pageSize = 20; // Adjust as needed
+
     // Load products and stats in parallel
     const [{ products, total }, columns, stats] = await Promise.all([
-        getProductsByCategory(params.category),
+        getProductsByCategory(params.category, undefined, { page, pageSize }),
         getColumnDefinitions(params.category),
         getCategoryStats(params.category),
     ]);
+
+    const totalPages = Math.ceil(total / pageSize);
 
     return (
         <div className="min-h-screen">
@@ -129,6 +139,45 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                         totalCount={total}
                     />
                 </div>
+                {/* Pagination */}
+                <div className="flex items-center justify-center gap-2 mt-8">
+                    {page > 1 && (
+                        <Link
+                            href={`/category/${params.category}?page=${page - 1}`}
+                            className="px-3 py-2 rounded-md border hover:bg-muted transition-colors"
+                        >
+                            ← Previous
+                        </Link>
+                    )}
+
+                    <div className="flex items-center gap-1">
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                            <Link
+                                key={p}
+                                href={`/category/${params.category}?page=${p}`}
+                                className={cn(
+                                    "px-3 py-2 rounded-md transition-colors",
+                                    page === p
+                                        ? "bg-primary text-primary-foreground"
+                                        : "border hover:bg-muted"
+                                )}
+                            >
+                                {p}
+                            </Link>
+                        ))}
+                    </div>
+
+                    {page < totalPages && (
+                        <Link
+                            href={`/category/${params.category}?page=${page + 1}`}
+                            className="px-3 py-2 rounded-md border hover:bg-muted transition-colors"
+                        >
+                            Next →
+                        </Link>
+                    )}
+                </div>
+                {/* End Pagination */}
+
             </section>
         </div>
     );

@@ -173,7 +173,7 @@ export function ProductTable({ products, columns, categoryName, totalCount }: Pr
 
                 <div className="flex items-center gap-2">
                     <span className="text-sm text-muted-foreground">
-                        {filteredProducts.length} з {totalCount || products.length} товарів
+                        Showing {filteredProducts.length} of {totalCount || products.length} items
                     </span>
 
                     {extraColumns.length > 0 && (
