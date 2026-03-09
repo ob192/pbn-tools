@@ -140,42 +140,64 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                     />
                 </div>
                 {/* Pagination */}
-                <div className="flex items-center justify-center gap-2 mt-8">
-                    {page > 1 && (
-                        <Link
-                            href={`/category/${params.category}?page=${page - 1}`}
-                            className="px-3 py-2 rounded-md border hover:bg-muted transition-colors"
-                        >
-                            ← Previous
-                        </Link>
-                    )}
-
-                    <div className="flex items-center gap-1">
-                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                {totalPages > 1 && (
+                    <div className="flex items-center justify-center gap-1 mt-8 px-4">
+                        {page > 1 && (
                             <Link
-                                key={p}
-                                href={`/category/${params.category}?page=${p}`}
-                                className={cn(
-                                    "px-3 py-2 rounded-md transition-colors",
-                                    page === p
-                                        ? "bg-primary text-primary-foreground"
-                                        : "border hover:bg-muted"
-                                )}
+                                href={`/category/${params.category}?page=${page - 1}`}
+                                className="px-3 py-2 rounded-md border hover:bg-muted transition-colors text-sm"
                             >
-                                {p}
+                                ←
                             </Link>
-                        ))}
-                    </div>
+                        )}
 
-                    {page < totalPages && (
-                        <Link
-                            href={`/category/${params.category}?page=${page + 1}`}
-                            className="px-3 py-2 rounded-md border hover:bg-muted transition-colors"
-                        >
-                            Next →
-                        </Link>
-                    )}
-                </div>
+                        <div className="flex items-center gap-1">
+                            {Array.from({ length: totalPages }, (_, i) => i + 1)
+                                .filter((p) => {
+                                    if (totalPages <= 5) return true;
+                                    if (p === 1 || p === totalPages) return true;
+                                    if (Math.abs(p - page) <= 1) return true;
+                                    return false;
+                                })
+                                .reduce<(number | '...')[]>((acc, p, idx, arr) => {
+                                    if (idx > 0 && typeof arr[idx - 1] === 'number' && (p as number) - (arr[idx - 1] as number) > 1) {
+                                        acc.push('...');
+                                    }
+                                    acc.push(p);
+                                    return acc;
+                                }, [])
+                                .map((p, idx) =>
+                                        p === '...' ? (
+                                            <span key={`ellipsis-${idx}`} className="px-2 py-2 text-sm text-muted-foreground">
+                            …
+                        </span>
+                                        ) : (
+                                            <Link
+                                                key={p}
+                                                href={`/category/${params.category}?page=${p}`}
+                                                className={cn(
+                                                    "min-w-[36px] h-9 flex items-center justify-center rounded-md text-sm transition-colors",
+                                                    page === p
+                                                        ? "bg-primary text-primary-foreground"
+                                                        : "border hover:bg-muted"
+                                                )}
+                                            >
+                                                {p}
+                                            </Link>
+                                        )
+                                )}
+                        </div>
+
+                        {page < totalPages && (
+                            <Link
+                                href={`/category/${params.category}?page=${page + 1}`}
+                                className="px-3 py-2 rounded-md border hover:bg-muted transition-colors text-sm"
+                            >
+                                →
+                            </Link>
+                        )}
+                    </div>
+                )}
                 {/* End Pagination */}
 
             </section>
