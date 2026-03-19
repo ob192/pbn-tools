@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
 
-const BASE_URL = 'https://reviewcard.io'
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://reviewcard.io'
 
 export default function robots(): MetadataRoute.Robots {
     return {
@@ -8,10 +8,9 @@ export default function robots(): MetadataRoute.Robots {
             {
                 userAgent: '*',
                 allow: '/',
-                disallow: [],
             },
         ],
-        sitemap: BASE_URL + '/sitemap.xml',
+        sitemap: `${BASE_URL}/sitemap.xml`,
         host: BASE_URL,
     }
 }

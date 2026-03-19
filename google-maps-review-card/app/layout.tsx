@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
-const BASE_URL = 'https://reviewcard.io'
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://reviewcard.io'
 
 export const viewport: Viewport = {
   themeColor: '#f59e0b',
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'ReviewCard — Google Maps review card builder for ad creatives',
@@ -61,27 +61,17 @@ export const metadata: Metadata = {
     title: 'ReviewCard — Google Maps Review Cards for Ad Creatives',
     description:
         'Build pixel-perfect Google Maps review cards in seconds. Boost ROAS with authentic social-proof creatives.',
-    images: ['/og-image.jpg'],
+    images: ['/og-image.png'],
   },
   icons: {
     icon: [
-      { url: '/icons/icon-32.png',  sizes: '32x32',  type: 'image/png' },
-      { url: '/icons/icon-96.png',  sizes: '96x96',  type: 'image/png' },
-      { url: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/favicon.ico',       sizes: 'any' },
+      { url: '/favicon.svg',       type: 'image/svg+xml' },
+      { url: '/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
     ],
-    apple: [
-      { url: '/icons/icon-152.png', sizes: '152x152', type: 'image/png' },
-      { url: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
-    ],
-    other: [
-      { rel: 'mask-icon', url: '/icons/icon-512.png' },
-    ],
+    apple: [{ url: '/apple-touch-icon.png' }],
   },
-
-  /* ── PWA manifest ── */
   manifest: '/site.webmanifest',
-
-  /* ── Robots ── */
   robots: {
     index: true,
     follow: true,
@@ -92,29 +82,21 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
-  },
-
-  /* ── Verification placeholders (fill in when you have them) ── */
-  verification: {
-    google: 'REPLACE_WITH_GOOGLE_SEARCH_CONSOLE_TOKEN',
-    // yandex: 'REPLACE_WITH_YANDEX_TOKEN',
-  },
+  }
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
       <html lang="en" dir="ltr">
       <head>
-        {/* Preconnect for Google Fonts */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
-        {/* Favicon */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/icons/icon-96.png" type="image/png" />
-        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/favicon-96x96.png" type="image/png" sizes="96x96" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-        {/* JSON-LD structured data */}
         <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
@@ -123,22 +105,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 '@graph': [
                   {
                     '@type': 'WebSite',
-                    '@id': BASE_URL + '/#website',
+                    '@id': `${BASE_URL}/#website`,
                     url: BASE_URL,
                     name: 'ReviewCard',
                     description:
                         'Build pixel-perfect Google Maps review cards for ad creatives.',
                     potentialAction: {
                       '@type': 'SearchAction',
-                      target: BASE_URL + '/?s={search_term_string}',
+                      target: `${BASE_URL}/?s={search_term_string}`,
                       'query-input': 'required name=search_term_string',
                     },
                   },
                   {
                     '@type': 'WebApplication',
-                    '@id': BASE_URL + '/#app',
+                    '@id': `${BASE_URL}/#app`,
                     name: 'ReviewCard Builder',
-                    url: BASE_URL + '/builder/',
+                    url: `${BASE_URL}/builder/`,
                     applicationCategory: 'BusinessApplication',
                     operatingSystem: 'Web',
                     offers: {
@@ -159,12 +141,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   },
                   {
                     '@type': 'Organization',
-                    '@id': BASE_URL + '/#organization',
+                    '@id': `${BASE_URL}/#organization`,
                     name: 'ReviewCard',
                     url: BASE_URL,
                     logo: {
                       '@type': 'ImageObject',
-                      url: BASE_URL + '/icons/icon-512.png',
+                      url: `${BASE_URL}/web-app-manifest-512x512.png`,
                     },
                   },
                 ],
