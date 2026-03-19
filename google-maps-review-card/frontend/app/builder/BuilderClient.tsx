@@ -43,8 +43,10 @@ const RATIOS = {
 type RatioKey = keyof typeof RATIOS
 
 const RATIO_ICONS: Record<RatioKey, { w: number; h: number }> = {
-  free: { w: 22, h: 16 }, square: { w: 18, h: 18 },
-  portrait43: { w: 15, h: 19 }, portrait: { w: 12, h: 21 },
+  free:       { w: 22, h: 16 },
+  square:     { w: 18, h: 18 },
+  portrait43: { w: 15, h: 19 },
+  portrait:   { w: 12, h: 21 },
 }
 
 const BG_SWATCHES = [
@@ -76,12 +78,6 @@ const PREV_MAX_H  = 480
 
 /* ══════════════════════════════════
    GOOGLE REVIEW CARD (memo'd)
-
-   KEY FIX: All styles are INLINE so html2canvas
-   can render them on cloned DOM nodes.
-   Tailwind classes are only used as supplements
-   for the live preview — every export-critical
-   property is set via style={}.
 ══════════════════════════════════ */
 const GmCard = memo(function GmCard({
                                       name, meta, avatarUrl, rating, date, text, currency, price, likes,
@@ -123,82 +119,60 @@ const GmCard = memo(function GmCard({
           }}
       >
         {/* Header */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'space-between',
-        }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.8em' }}>
             <div style={{ position: 'relative', flexShrink: 0 }}>
               {avatarUrl ? (
                   <img
                       src={avatarUrl} alt={name}
                       style={{
-                        width: '2.67em',
-                        height: '2.67em',
-                        borderRadius: '50%',
-                        objectFit: 'cover',
-                        display: 'block',
+                        width: '2.67em', height: '2.67em',
+                        borderRadius: '50%', objectFit: 'cover', display: 'block',
                       }}
                       loading="lazy" decoding="async"
                   />
               ) : (
-                  <div
-                      style={{
-                        width: '2.67em',
-                        height: '2.67em',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: 'white',
-                        fontSize: '0.93em',
-                        fontWeight: 700,
-                        fontFamily: "'Roboto', sans-serif",
-                        background: avatarBg,
-                      }}
-                  >
+                  <div style={{
+                    width: '2.67em', height: '2.67em',
+                    borderRadius: '50%',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: 'white', fontSize: '0.93em', fontWeight: 700,
+                    fontFamily: "'Roboto', sans-serif",
+                    background: avatarBg,
+                  }}>
                     {initials}
                   </div>
               )}
               <div style={{
-                position: 'absolute',
-                bottom: '-0.07em',
-                right: '-0.07em',
-                width: '0.93em',
-                height: '0.93em',
-                background: '#ff6d00',
-                borderRadius: '50%',
+                position: 'absolute', bottom: '-0.07em', right: '-0.07em',
+                width: '0.93em', height: '0.93em',
+                background: '#ff6d00', borderRadius: '50%',
                 border: '2px solid #ffffff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
                 <svg width="6" height="6" viewBox="0 0 24 24" fill="white" aria-hidden="true">
                   <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                 </svg>
               </div>
             </div>
+
             <div>
+            <span style={{
+              fontSize: '0.93em', fontWeight: 500, color: '#202124',
+              display: 'block', letterSpacing: '0.01em',
+              fontFamily: "'Roboto', sans-serif",
+            }}>{name || 'Reviewer Name'}</span>
               <span style={{
-                fontSize: '0.93em',
-                fontWeight: 500,
-                color: '#202124',
-                display: 'block',
-                letterSpacing: '0.01em',
-                fontFamily: "'Roboto', sans-serif",
-              }}>{name || 'Reviewer Name'}</span>
-              <span style={{
-                fontSize: '0.8em',
-                color: '#70757a',
-                marginTop: '0.1em',
-                display: 'block',
+                fontSize: '0.8em', color: '#70757a',
+                marginTop: '0.1em', display: 'block',
                 fontFamily: "'Roboto', sans-serif",
               }}>{meta || 'Local Guide'}</span>
             </div>
           </div>
+
           {/* Google G logo */}
-          <svg width="1.33em" height="1.33em" viewBox="0 0 24 24" style={{ flexShrink: 0, opacity: 0.85 }} aria-hidden="true">
+          <svg width="1.33em" height="1.33em" viewBox="0 0 24 24"
+               style={{ flexShrink: 0, opacity: 0.85 }} aria-hidden="true">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
             <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
             <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
@@ -207,14 +181,11 @@ const GmCard = memo(function GmCard({
         </div>
 
         {/* Stars + date */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          marginTop: '0.27em',
-          gap: 0,
-        }}>
-          <div style={{ fontSize: '1.07em', letterSpacing: '-0.1em', marginRight: '0.53em', lineHeight: 1 }}
-               aria-label={`${rating} of 5 stars`}>
+        <div style={{ display: 'flex', alignItems: 'center', marginTop: '0.27em', gap: 0 }}>
+          <div
+              style={{ fontSize: '1.07em', letterSpacing: '-0.1em', marginRight: '0.53em', lineHeight: 1 }}
+              aria-label={`${rating} of 5 stars`}
+          >
             {[1,2,3,4,5].map(i => (
                 <span key={i} style={{ color: i <= rating ? '#fbbc04' : '#dadce0' }} aria-hidden="true">★</span>
             ))}
@@ -229,58 +200,44 @@ const GmCard = memo(function GmCard({
         )}
 
         <div style={{
-          fontSize: '0.93em',
-          lineHeight: 1.43,
-          marginTop: '0.53em',
-          color: '#3c4043',
-          fontFamily: "'Roboto', sans-serif",
+          fontSize: '0.93em', lineHeight: 1.43, marginTop: '0.53em',
+          color: '#3c4043', fontFamily: "'Roboto', sans-serif",
         }}>
           {text || 'Review text will appear here...'}
         </div>
 
         {specParts.length > 0 && (
             <div style={{
-              background: '#f1f3f4',
-              borderRadius: '0.7em',
-              padding: '0.65em 1em',
-              marginTop: '0.9em',
-              fontSize: '0.87em',
-              color: '#3c4043',
-              display: 'inline-flex',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              gap: '0.27em',
+              background: '#f1f3f4', borderRadius: '0.7em',
+              padding: '0.65em 1em', marginTop: '0.9em',
+              fontSize: '0.87em', color: '#3c4043',
+              display: 'inline-flex', alignItems: 'center',
+              flexWrap: 'wrap', gap: '0.27em',
               fontFamily: "'Roboto', sans-serif",
             }}>
               {specParts.map((p, i) => (
                   <span key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.27em' }}>
-                    {p}
+              {p}
                     {i < specParts.length - 1 && (
                         <span style={{ color: '#bdc1c6', margin: '0 0.6em', fontWeight: 300 }}>|</span>
                     )}
-                  </span>
+            </span>
               ))}
             </div>
         )}
 
         {photos.length > 0 && (
             <div style={{
-              display: 'grid',
-              gap: '0.4em',
-              marginTop: '1em',
+              display: 'grid', gap: '0.4em', marginTop: '1em',
               gridTemplateColumns: `repeat(${cols}, 1fr)`,
             }}>
               {photos.map((p, i) => (
                   <img
                       key={i} src={p.url} alt=""
                       style={{
-                        width: '100%',
-                        aspectRatio: '1/1',
-                        borderRadius: '0.4em',
-                        objectFit: 'cover',
-                        border: '1px solid rgba(0,0,0,.05)',
-                        display: 'block',
-                        minHeight: 0,
+                        width: '100%', aspectRatio: '1/1', borderRadius: '0.4em',
+                        objectFit: 'cover', border: '1px solid rgba(0,0,0,.05)',
+                        display: 'block', minHeight: 0,
                       }}
                       loading="lazy" decoding="async"
                   />
@@ -288,53 +245,99 @@ const GmCard = memo(function GmCard({
             </div>
         )}
 
-        {/* Footer — fully inline so html2canvas preserves alignment */}
-        <div style={{
-          marginTop: '1.33em',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '1.6em',
-        }}>
-          <button type="button" style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.53em',
-            cursor: 'pointer',
-            background: 'none',
-            border: 'none',
-            padding: 0,
-            fontFamily: "'Roboto', sans-serif",
-            fontSize: '0.87em',
-            fontWeight: 500,
-            color: '#3c4043',
-          }}>
-            <svg style={{ width: '1.2em', height: '1.2em', flexShrink: 0 }} viewBox="0 0 24 24" fill="#d93025" aria-hidden="true">
+        {/* Footer */}
+        <div style={{ marginTop: '1.33em', display: 'flex', alignItems: 'center', gap: '1.6em' }}>
+
+          {/* ── Helpful / Likes ── */}
+          <button
+              type="button"
+              style={{
+                display:    'flex',
+                alignItems: 'center',
+                gap:        '0.4em',
+                background: 'none',
+                border:     'none',
+                padding:    0,
+                margin:     0,
+                cursor:     'pointer',
+                fontFamily: "'Roboto', sans-serif",
+                fontSize:   '0.87em',
+                fontWeight: 500,
+                color:      '#3c4043',
+                lineHeight: 1,   /* ← kills the implicit ~1.2 line-height on <button> */
+              }}
+          >
+            <svg
+                viewBox="0 0 24 24"
+                fill="#d93025"
+                aria-hidden="true"
+                style={{
+                  width:     '1.15em',
+                  height:    '1.15em',
+                  flexShrink: 0,
+                  display:   'block',  /* ← removes the inline descender gap */
+                }}
+            >
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
             </svg>
-            <span style={{ fontFamily: "'Roboto', sans-serif", fontSize: 'inherit', fontWeight: 'inherit', color: '#3c4043' }}>
-              {likes || '4'}
-            </span>
+            <span
+                style={{
+                  fontFamily: "'Roboto', sans-serif",
+                  fontSize:   'inherit',
+                  fontWeight: 'inherit',
+                  color:      '#3c4043',
+                  lineHeight: 1,   /* ← span height = font-size, no extra space above/below */
+                }}
+            >
+      {likes || '4'}
+    </span>
           </button>
-          <button type="button" style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.53em',
-            cursor: 'pointer',
-            background: 'none',
-            border: 'none',
-            padding: 0,
-            fontFamily: "'Roboto', sans-serif",
-            fontSize: '0.87em',
-            fontWeight: 500,
-            color: '#3c4043',
-          }}>
-            <svg style={{ width: '1.2em', height: '1.2em', flexShrink: 0 }} viewBox="0 0 24 24" fill="#70757a" aria-hidden="true">
+
+          {/* ── Share ── */}
+          <button
+              type="button"
+              style={{
+                display:    'flex',
+                alignItems: 'center',
+                gap:        '0.4em',
+                background: 'none',
+                border:     'none',
+                padding:    0,
+                margin:     0,
+                cursor:     'pointer',
+                fontFamily: "'Roboto', sans-serif",
+                fontSize:   '0.87em',
+                fontWeight: 500,
+                color:      '#3c4043',
+                lineHeight: 1,
+              }}
+          >
+            <svg
+                viewBox="0 0 24 24"
+                fill="#70757a"
+                aria-hidden="true"
+                style={{
+                  width:     '1.15em',
+                  height:    '1.15em',
+                  flexShrink: 0,
+                  display:   'block',  /* ← same fix */
+                }}
+            >
               <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
             </svg>
-            <span style={{ fontFamily: "'Roboto', sans-serif", fontSize: 'inherit', fontWeight: 'inherit', color: '#3c4043' }}>
-              Share
-            </span>
+            <span
+                style={{
+                  fontFamily: "'Roboto', sans-serif",
+                  fontSize:   'inherit',
+                  fontWeight: 'inherit',
+                  color:      '#3c4043',
+                  lineHeight: 1,
+                }}
+            >
+      Share
+    </span>
           </button>
+
         </div>
       </div>
   )
@@ -381,9 +384,6 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   )
 }
 
-/* ══════════════════════════════════
-   PHOTO THUMBNAIL (memo'd per-item)
-══════════════════════════════════ */
 const PhotoThumb = memo(function PhotoThumb({ url, onRemove }: { url: string; onRemove: () => void }) {
   return (
       <div className="relative w-14 h-14 rounded-lg overflow-hidden border border-[#2e3250] group flex-shrink-0">
@@ -399,9 +399,6 @@ const PhotoThumb = memo(function PhotoThumb({ url, onRemove }: { url: string; on
   )
 })
 
-/* ══════════════════════════════════
-   RATIO BUTTON (memo'd)
-══════════════════════════════════ */
 const RatioBtn = memo(function RatioBtn({
                                           k, label, active, onSelect,
                                         }: {
@@ -424,9 +421,6 @@ const RatioBtn = memo(function RatioBtn({
   )
 })
 
-/* ══════════════════════════════════
-   BG SWATCH BUTTON (memo'd)
-══════════════════════════════════ */
 const SwatchBtn = memo(function SwatchBtn({
                                             sw, active, onSelect,
                                           }: {
@@ -535,7 +529,7 @@ export default function BuilderClient() {
   const onTouchEnd = useCallback((e: ReactTouchEvent) => {
     if (!touchRef.current) return
     const dy = touchRef.current.startY - e.changedTouches[0].clientY
-    if (dy > 60) setDrawer(d => d === 'closed' ? 'peek' : 'open')
+    if (dy > 60)  setDrawer(d => d === 'closed' ? 'peek' : 'open')
     else if (dy < -60) setDrawer(d => d === 'open' ? 'peek' : 'closed')
     touchRef.current = null
   }, [])
@@ -552,10 +546,6 @@ export default function BuilderClient() {
       let finalCanvas: HTMLCanvasElement
 
       if (ratio === 'free') {
-        /*
-         * Card-only mode: clone the card off-screen and render at 3×.
-         * Because all card styles are inline, the clone is self-contained.
-         */
         const computedFs = parseFloat(getComputedStyle(card).fontSize) || 15
         const host = document.createElement('div')
         host.style.cssText = 'position:fixed;top:-9999px;left:-9999px;display:inline-block;background:transparent'
@@ -564,33 +554,27 @@ export default function BuilderClient() {
           `width:${card.offsetWidth}px`,
           `font-size:${computedFs}px`,
           `padding:${(computedFs * 1.07).toFixed(1)}px`,
-          "background:#ffffff",
-          "backdrop-filter:none",
-          "-webkit-backdrop-filter:none",
-          "border:none",
-          "border-radius:8px",
-          "box-shadow:0 1px 3px rgba(60,64,67,.15),0 4px 8px rgba(60,64,67,.1)",
-          "color:#202124",
-          "font-family:Roboto,sans-serif",
-          "position:relative",
-          "overflow:hidden",
-          "box-sizing:border-box",
+          'background:#ffffff',
+          'backdrop-filter:none',
+          '-webkit-backdrop-filter:none',
+          'border:none',
+          'border-radius:8px',
+          'box-shadow:0 1px 3px rgba(60,64,67,.15),0 4px 8px rgba(60,64,67,.1)',
+          'color:#202124',
+          'font-family:Roboto,sans-serif',
+          'position:relative',
+          'overflow:hidden',
+          'box-sizing:border-box',
         ].join(';')
         host.appendChild(clone)
         document.body.appendChild(host)
         finalCanvas = await html2canvas(host, {
-          scale: 3,
-          useCORS: true,
-          allowTaint: true,
-          backgroundColor: null,
-          logging: false,
+          scale: 3, useCORS: true, allowTaint: true,
+          backgroundColor: null, logging: false,
         })
         document.body.removeChild(host)
 
       } else {
-        /*
-         * Ratio mode: render card at exact export width, composite on background.
-         */
         const exportW = cfg.w!
         const exportH = cfg.h!
         const hPadFrac = 0.06
@@ -604,29 +588,25 @@ export default function BuilderClient() {
           `width:${exportCardW}px`,
           `font-size:${exportFontSize}px`,
           `padding:${(exportFontSize * 1.07).toFixed(1)}px`,
-          "background:#ffffff",
-          "backdrop-filter:none",
-          "-webkit-backdrop-filter:none",
-          "border:none",
-          "border-radius:8px",
-          "box-shadow:0 2px 8px rgba(60,64,67,.2)",
-          "color:#202124",
-          "font-family:Roboto,sans-serif",
-          "position:relative",
-          "overflow:visible",
-          "box-sizing:border-box",
+          'background:#ffffff',
+          'backdrop-filter:none',
+          '-webkit-backdrop-filter:none',
+          'border:none',
+          'border-radius:8px',
+          'box-shadow:0 2px 8px rgba(60,64,67,.2)',
+          'color:#202124',
+          'font-family:Roboto,sans-serif',
+          'position:relative',
+          'overflow:visible',
+          'box-sizing:border-box',
         ].join(';')
         host.appendChild(clone)
         document.body.appendChild(host)
 
         const SCALE = 2
         const cardBmp = await html2canvas(host, {
-          scale: SCALE,
-          useCORS: true,
-          allowTaint: true,
-          backgroundColor: null,
-          logging: false,
-          width: exportCardW,
+          scale: SCALE, useCORS: true, allowTaint: true,
+          backgroundColor: null, logging: false, width: exportCardW,
         })
         document.body.removeChild(host)
 
@@ -703,10 +683,10 @@ export default function BuilderClient() {
       : drawer === 'peek' ? '55vh' : '88vh'
 
   /* ── Score handlers ── */
-  const toggleScore = useCallback((k: 'food' | 'service' | 'atm', v: boolean) => {
+  const toggleScore    = useCallback((k: 'food' | 'service' | 'atm', v: boolean) => {
     setScores(s => ({ ...s, [k]: { ...s[k], enabled: v } }))
   }, [])
-  const setScoreValue = useCallback((k: 'food' | 'service' | 'atm', v: number) => {
+  const setScoreValue  = useCallback((k: 'food' | 'service' | 'atm', v: number) => {
     setScores(s => ({ ...s, [k]: { ...s[k], value: v } }))
   }, [])
 
@@ -717,13 +697,19 @@ export default function BuilderClient() {
       <>
         <Section title="Reviewer">
           <Field label="Name">
-            <input className={inputCls} value={name} onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)} placeholder="Full name" />
+            <input className={inputCls} value={name}
+                   onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+                   placeholder="Full name" />
           </Field>
           <Field label="Meta line">
-            <input className={inputCls} value={meta} onChange={(e: ChangeEvent<HTMLInputElement>) => setMetaDeferred(e.target.value)} placeholder="Local Guide · N reviews" />
+            <input className={inputCls} value={meta}
+                   onChange={(e: ChangeEvent<HTMLInputElement>) => setMetaDeferred(e.target.value)}
+                   placeholder="Local Guide · N reviews" />
           </Field>
           <Field label="Avatar URL (blank = initials)">
-            <input className={inputCls} type="url" value={avatarUrl} onChange={(e: ChangeEvent<HTMLInputElement>) => setAvatarUrl(e.target.value)} placeholder="https://…" />
+            <input className={inputCls} type="url" value={avatarUrl}
+                   onChange={(e: ChangeEvent<HTMLInputElement>) => setAvatarUrl(e.target.value)}
+                   placeholder="https://…" />
           </Field>
         </Section>
 
@@ -733,7 +719,8 @@ export default function BuilderClient() {
               {[1,2,3,4,5].map(i => (
                   <button
                       key={i} type="button"
-                      onMouseEnter={() => setHoverStar(i)} onMouseLeave={() => setHoverStar(0)}
+                      onMouseEnter={() => setHoverStar(i)}
+                      onMouseLeave={() => setHoverStar(0)}
                       onClick={() => setRating(i)}
                       className="text-2xl leading-none active:scale-95"
                       style={{ transform: 'translateZ(0)' }}
@@ -744,7 +731,9 @@ export default function BuilderClient() {
             </div>
           </Field>
           <Field label="Date">
-            <input className={inputCls} value={date} onChange={(e: ChangeEvent<HTMLInputElement>) => setDate(e.target.value)} placeholder="2 weeks ago" />
+            <input className={inputCls} value={date}
+                   onChange={(e: ChangeEvent<HTMLInputElement>) => setDate(e.target.value)}
+                   placeholder="2 weeks ago" />
           </Field>
           <Field label="Review text">
           <textarea
@@ -769,11 +758,14 @@ export default function BuilderClient() {
                 <option value="€">€ EUR</option>
                 <option value="£">£ GBP</option>
               </select>
-              <input className={inputCls} value={price} onChange={(e: ChangeEvent<HTMLInputElement>) => setPrice(e.target.value)} placeholder="100–300" />
+              <input className={inputCls} value={price}
+                     onChange={(e: ChangeEvent<HTMLInputElement>) => setPrice(e.target.value)}
+                     placeholder="100–300" />
             </div>
           </Field>
           <Field label="Helpful count">
-            <input className={inputCls} type="number" min="0" value={likes} onChange={(e: ChangeEvent<HTMLInputElement>) => setLikes(e.target.value)} />
+            <input className={inputCls} type="number" min="0" value={likes}
+                   onChange={(e: ChangeEvent<HTMLInputElement>) => setLikes(e.target.value)} />
           </Field>
         </Section>
 
@@ -814,7 +806,9 @@ export default function BuilderClient() {
               {(['food', 'service', 'atm'] as const).map(k => (
                   <div key={k} className="flex items-center gap-3">
                     <Toggle checked={scores[k].enabled} onChange={v => toggleScore(k, v)} />
-                    <span className="text-sm text-white/60 flex-1 capitalize">{k === 'atm' ? 'Atmosphere' : k}</span>
+                    <span className="text-sm text-white/60 flex-1 capitalize">
+                {k === 'atm' ? 'Atmosphere' : k}
+              </span>
                     <input
                         type="number" min={1} max={5} disabled={!scores[k].enabled}
                         value={scores[k].value}
@@ -906,15 +900,11 @@ export default function BuilderClient() {
               <button
                   type="button" onClick={() => setAdvanced(false)}
                   className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${!advanced ? 'bg-[#20233a] text-white' : 'text-white/40 hover:text-white/70'}`}
-              >
-                Basic
-              </button>
+              >Basic</button>
               <button
                   type="button" onClick={() => setAdvanced(true)}
                   className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${advanced ? 'bg-[#20233a] text-white' : 'text-white/40 hover:text-white/70'}`}
-              >
-                Advanced
-              </button>
+              >Advanced</button>
             </div>
           </div>
         </header>
@@ -942,36 +932,63 @@ export default function BuilderClient() {
               Live Preview
             </p>
 
-            {ratio === 'free' ? (
-                <div className="w-full max-w-sm px-4">
-                  <GmCard
-                      id="gm-preview-card"
-                      name={name} meta={meta} avatarUrl={avatarUrl} rating={rating}
-                      date={date} text={text} currency={currency} price={price}
-                      likes={likes} photos={photos} scores={scores}
-                  />
-                </div>
-            ) : (
-                <div
-                    className="relative flex items-center justify-center rounded-xl overflow-hidden flex-shrink-0 mx-4"
-                    style={{
-                      width: frameDims ? Math.min(frameDims.w, typeof window !== 'undefined' ? window.innerWidth - 32 : 400) + 'px' : undefined,
-                      height: frameDims ? frameDims.h + 'px' : undefined,
-                      ...(canvasBg === 'transparent' ? checkerBg : { background: canvasBg }),
-                      contain: 'layout paint',
-                      transition: 'width .3s ease, height .3s ease',
-                    }}
-                >
-                  <div className="w-[88%]">
-                    <GmCard
-                        id="gm-preview-card"
-                        name={name} meta={meta} avatarUrl={avatarUrl} rating={rating}
-                        date={date} text={text} currency={currency} price={price}
-                        likes={likes} photos={photos} scores={scores}
-                    />
-                  </div>
-                </div>
-            )}
+            {/*
+            ── UNIFIED PREVIEW FRAME ───────────────────────────────────────────
+            Single DOM structure for ALL ratio modes — eliminates the layout
+            re-mount that caused the card to jump when switching formats.
+
+            How it works:
+            • width: calc(100% - 32px) provides consistent 16px side margins.
+            • maxWidth transitions smoothly between free (384px) and ratio sizes.
+            • aspectRatio (CSS) enforces the frame proportions in ratio modes;
+              in free mode it's absent so height is auto (content-driven).
+            • overflow: hidden clips the card to the frame in ratio modes.
+            • inner div width transitions from 100% (free) → 88% (ratio).
+            ─────────────────────────────────────────────────────────────────── */}
+            <div
+                style={{
+                  position: 'relative',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                  // Always fills available width minus 16px each side
+                  width: 'calc(100% - 32px)',
+                  // maxWidth is the only value that changes between modes → CSS-transitioned
+                  maxWidth: ratio === 'free'
+                      ? '384px'
+                      : `${frameDims?.w ?? 300}px`,
+                  // CSS aspect-ratio handles height automatically for ratio modes
+                  aspectRatio: frameDims
+                      ? `${frameDims.w} / ${frameDims.h}`
+                      : undefined,
+                  // Visual frame styling — only visible in ratio modes
+                  borderRadius: ratio === 'free' ? 0 : '12px',
+                  overflow:     ratio === 'free' ? 'visible' : 'hidden',
+                  ...(ratio !== 'free'
+                          ? canvasBg === 'transparent'
+                              ? checkerBg
+                              : { background: canvasBg }
+                          : {}
+                  ),
+                  // Smooth transitions for size and shape changes
+                  transition: 'max-width .3s ease, border-radius .3s ease',
+                }}
+            >
+              <div
+                  style={{
+                    width: ratio === 'free' ? '100%' : '88%',
+                    transition: 'width .3s ease',
+                  }}
+              >
+                <GmCard
+                    id="gm-preview-card"
+                    name={name} meta={meta} avatarUrl={avatarUrl} rating={rating}
+                    date={date} text={text} currency={currency} price={price}
+                    likes={likes} photos={photos} scores={scores}
+                />
+              </div>
+            </div>
           </main>
 
           {/* ── MOBILE BOTTOM DRAWER ── */}
@@ -999,7 +1016,6 @@ export default function BuilderClient() {
                     <span className="text-xs text-white/35 ml-1">· tap to expand</span>
                 )}
               </div>
-
               <div className="flex items-center gap-2">
                 <button
                     type="button"
@@ -1043,7 +1059,8 @@ export default function BuilderClient() {
                     <h2 className="text-base font-semibold">Ready to download</h2>
                     <p className="text-xs text-white/40 mt-0.5">{modal.label}</p>
                   </div>
-                  <button type="button" onClick={closeModal} className="text-white/30 hover:text-white p-1" aria-label="Close">
+                  <button type="button" onClick={closeModal}
+                          className="text-white/30 hover:text-white p-1" aria-label="Close">
                     <X className="w-5 h-5" />
                   </button>
                 </div>
