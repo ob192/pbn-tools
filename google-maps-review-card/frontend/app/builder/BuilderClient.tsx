@@ -711,7 +711,7 @@ export default function BuilderClient() {
         <header className="flex items-center justify-between px-4 py-2.5 bg-[#13151f] border-b border-[#252840] flex-shrink-0 z-40">
           <div className="flex items-center gap-3 min-w-0">
             <Link
-                href="/"
+                href="/frontend/public"
                 className="flex items-center gap-1.5 text-white/40 hover:text-white/80 transition-colors text-xs flex-shrink-0"
                 prefetch={false}
             >

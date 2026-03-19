@@ -22,7 +22,7 @@ export default function Navbar() {
       }`}>
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
+        <Link href="/frontend/public" className="flex items-center gap-2.5 group">
           <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/30 group-hover:scale-105 transition-transform">
             <Star className="w-4 h-4 text-[#08090c] fill-[#08090c]" />
           </div>
