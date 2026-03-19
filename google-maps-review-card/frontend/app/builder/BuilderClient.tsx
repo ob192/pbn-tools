@@ -20,8 +20,6 @@ interface Scores { food: ScoreState; service: ScoreState; atm: ScoreState }
 /* ══════════════════════════════════
    PERFORMANCE UTILITIES
 ══════════════════════════════════ */
-
-/** Lightweight debounce for text inputs – avoids re-render storms on fast typing */
 function useDeferredSetter<T>(setter: (v: T) => void) {
   return useCallback(
       (v: T) => startTransition(() => setter(v)),
@@ -29,11 +27,10 @@ function useDeferredSetter<T>(setter: (v: T) => void) {
   )
 }
 
-/** Stable identity for empty arrays to prevent child re-renders */
 const EMPTY_PHOTOS: Photo[] = []
 
 /* ══════════════════════════════════
-   CONSTANTS (hoisted outside component)
+   CONSTANTS
 ══════════════════════════════════ */
 const PAL = ['#1a73e8','#ea4335','#34a853','#fbbc04','#9c27b0','#ff6d00','#00acc1'] as const
 
@@ -79,6 +76,12 @@ const PREV_MAX_H  = 480
 
 /* ══════════════════════════════════
    GOOGLE REVIEW CARD (memo'd)
+
+   KEY FIX: All styles are INLINE so html2canvas
+   can render them on cloned DOM nodes.
+   Tailwind classes are only used as supplements
+   for the live preview — every export-critical
+   property is set via style={}.
 ══════════════════════════════════ */
 const GmCard = memo(function GmCard({
                                       name, meta, avatarUrl, rating, date, text, currency, price, likes,
@@ -106,45 +109,96 @@ const GmCard = memo(function GmCard({
   return (
       <div
           id={id}
-          className="bg-white rounded-lg p-4 w-full"
           style={{
-            fontFamily: 'DM Sans, Roboto, sans-serif',
+            fontFamily: "'Roboto', sans-serif",
             color: '#202124',
+            background: '#ffffff',
+            borderRadius: '8px',
+            padding: '1.07em',
+            width: '100%',
             boxShadow: '0 1px 3px rgba(60,64,67,.15),0 4px 8px rgba(60,64,67,.1)',
             contain: 'layout style paint',
+            position: 'relative',
+            boxSizing: 'border-box',
           }}
       >
         {/* Header */}
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3">
-            <div className="relative flex-shrink-0">
+        <div style={{
+          display: 'flex',
+          alignItems: 'flex-start',
+          justifyContent: 'space-between',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.8em' }}>
+            <div style={{ position: 'relative', flexShrink: 0 }}>
               {avatarUrl ? (
                   <img
                       src={avatarUrl} alt={name}
-                      className="w-10 h-10 rounded-full object-cover"
+                      style={{
+                        width: '2.67em',
+                        height: '2.67em',
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        display: 'block',
+                      }}
                       loading="lazy" decoding="async"
                   />
               ) : (
                   <div
-                      className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold"
-                      style={{ background: avatarBg }}
+                      style={{
+                        width: '2.67em',
+                        height: '2.67em',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'white',
+                        fontSize: '0.93em',
+                        fontWeight: 700,
+                        fontFamily: "'Roboto', sans-serif",
+                        background: avatarBg,
+                      }}
                   >
                     {initials}
                   </div>
               )}
-              <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-orange-500 rounded-full border-2 border-white flex items-center justify-center">
+              <div style={{
+                position: 'absolute',
+                bottom: '-0.07em',
+                right: '-0.07em',
+                width: '0.93em',
+                height: '0.93em',
+                background: '#ff6d00',
+                borderRadius: '50%',
+                border: '2px solid #ffffff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
                 <svg width="6" height="6" viewBox="0 0 24 24" fill="white" aria-hidden="true">
                   <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                 </svg>
               </div>
             </div>
             <div>
-              <div className="text-sm font-medium leading-tight">{name || 'Reviewer Name'}</div>
-              <div className="text-xs text-[#70757a] mt-0.5">{meta || 'Local Guide'}</div>
+              <span style={{
+                fontSize: '0.93em',
+                fontWeight: 500,
+                color: '#202124',
+                display: 'block',
+                letterSpacing: '0.01em',
+                fontFamily: "'Roboto', sans-serif",
+              }}>{name || 'Reviewer Name'}</span>
+              <span style={{
+                fontSize: '0.8em',
+                color: '#70757a',
+                marginTop: '0.1em',
+                display: 'block',
+                fontFamily: "'Roboto', sans-serif",
+              }}>{meta || 'Local Guide'}</span>
             </div>
           </div>
-          {/* Google G logo – static SVG, no need to memo */}
-          <svg width="18" height="18" viewBox="0 0 24 24" className="flex-shrink-0 opacity-80 mt-0.5" aria-hidden="true">
+          {/* Google G logo */}
+          <svg width="1.33em" height="1.33em" viewBox="0 0 24 24" style={{ flexShrink: 0, opacity: 0.85 }} aria-hidden="true">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
             <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
             <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
@@ -153,63 +207,135 @@ const GmCard = memo(function GmCard({
         </div>
 
         {/* Stars + date */}
-        <div className="flex items-center gap-2 mt-2">
-          <StarRow rating={rating} />
-          <span className="text-xs text-[#70757a]">{date}</span>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          marginTop: '0.27em',
+          gap: 0,
+        }}>
+          <div style={{ fontSize: '1.07em', letterSpacing: '-0.1em', marginRight: '0.53em', lineHeight: 1 }}
+               aria-label={`${rating} of 5 stars`}>
+            {[1,2,3,4,5].map(i => (
+                <span key={i} style={{ color: i <= rating ? '#fbbc04' : '#dadce0' }} aria-hidden="true">★</span>
+            ))}
+          </div>
+          <span style={{ fontSize: '0.8em', color: '#70757a', fontFamily: "'Roboto', sans-serif" }}>{date}</span>
         </div>
 
-        {priceStr && <div className="text-xs text-[#3c4043] mt-1">{priceStr}</div>}
-        <p className="text-sm leading-snug mt-2 text-[#3c4043]">{text || 'Review text will appear here...'}</p>
+        {priceStr && (
+            <div style={{ fontSize: '0.87em', color: '#3c4043', marginTop: '0.27em', fontFamily: "'Roboto', sans-serif" }}>
+              {priceStr}
+            </div>
+        )}
+
+        <div style={{
+          fontSize: '0.93em',
+          lineHeight: 1.43,
+          marginTop: '0.53em',
+          color: '#3c4043',
+          fontFamily: "'Roboto', sans-serif",
+        }}>
+          {text || 'Review text will appear here...'}
+        </div>
 
         {specParts.length > 0 && (
-            <div className="inline-flex items-center flex-wrap gap-1 bg-[#f1f3f4] rounded-xl px-3 py-2 mt-3 text-xs text-[#3c4043]">
+            <div style={{
+              background: '#f1f3f4',
+              borderRadius: '0.7em',
+              padding: '0.65em 1em',
+              marginTop: '0.9em',
+              fontSize: '0.87em',
+              color: '#3c4043',
+              display: 'inline-flex',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '0.27em',
+              fontFamily: "'Roboto', sans-serif",
+            }}>
               {specParts.map((p, i) => (
-                  <span key={i} className="flex items-center gap-1">
-              {p}
-                    {i < specParts.length - 1 && <span className="text-[#bdc1c6] mx-1">|</span>}
-            </span>
+                  <span key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.27em' }}>
+                    {p}
+                    {i < specParts.length - 1 && (
+                        <span style={{ color: '#bdc1c6', margin: '0 0.6em', fontWeight: 300 }}>|</span>
+                    )}
+                  </span>
               ))}
             </div>
         )}
 
         {photos.length > 0 && (
-            <div className="mt-3" style={{ display: 'grid', gap: '4px', gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
+            <div style={{
+              display: 'grid',
+              gap: '0.4em',
+              marginTop: '1em',
+              gridTemplateColumns: `repeat(${cols}, 1fr)`,
+            }}>
               {photos.map((p, i) => (
                   <img
                       key={i} src={p.url} alt=""
-                      className="w-full rounded aspect-square object-cover"
-                      style={{ border: '1px solid rgba(0,0,0,.05)' }}
+                      style={{
+                        width: '100%',
+                        aspectRatio: '1/1',
+                        borderRadius: '0.4em',
+                        objectFit: 'cover',
+                        border: '1px solid rgba(0,0,0,.05)',
+                        display: 'block',
+                        minHeight: 0,
+                      }}
                       loading="lazy" decoding="async"
                   />
               ))}
             </div>
         )}
 
-        <div className="flex items-center gap-5 mt-3 pt-2.5 border-t border-[#f1f3f4]">
-          <button className="flex items-center gap-1.5 text-xs font-medium text-[#3c4043]" type="button">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="#d93025" aria-hidden="true">
+        {/* Footer — fully inline so html2canvas preserves alignment */}
+        <div style={{
+          marginTop: '1.33em',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '1.6em',
+        }}>
+          <button type="button" style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.53em',
+            cursor: 'pointer',
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            fontFamily: "'Roboto', sans-serif",
+            fontSize: '0.87em',
+            fontWeight: 500,
+            color: '#3c4043',
+          }}>
+            <svg style={{ width: '1.2em', height: '1.2em', flexShrink: 0 }} viewBox="0 0 24 24" fill="#d93025" aria-hidden="true">
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
             </svg>
-            {likes || '4'}
+            <span style={{ fontFamily: "'Roboto', sans-serif", fontSize: 'inherit', fontWeight: 'inherit', color: '#3c4043' }}>
+              {likes || '4'}
+            </span>
           </button>
-          <button className="flex items-center gap-1.5 text-xs font-medium text-[#3c4043]" type="button">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="#70757a" aria-hidden="true">
+          <button type="button" style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.53em',
+            cursor: 'pointer',
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            fontFamily: "'Roboto', sans-serif",
+            fontSize: '0.87em',
+            fontWeight: 500,
+            color: '#3c4043',
+          }}>
+            <svg style={{ width: '1.2em', height: '1.2em', flexShrink: 0 }} viewBox="0 0 24 24" fill="#70757a" aria-hidden="true">
               <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
             </svg>
-            Share
+            <span style={{ fontFamily: "'Roboto', sans-serif", fontSize: 'inherit', fontWeight: 'inherit', color: '#3c4043' }}>
+              Share
+            </span>
           </button>
         </div>
-      </div>
-  )
-})
-
-/** Pre-rendered star rows to avoid re-creating 5 spans every render */
-const StarRow = memo(function StarRow({ rating }: { rating: number }) {
-  return (
-      <div className="flex" style={{ letterSpacing: '-2px' }} aria-label={`${rating} of 5 stars`}>
-        {[1,2,3,4,5].map(i => (
-            <span key={i} style={{ color: i <= rating ? '#fbbc04' : '#dadce0', fontSize: '15px' }} aria-hidden="true">★</span>
-        ))}
       </div>
   )
 })
@@ -368,7 +494,6 @@ export default function BuilderClient() {
   const [ratio,    setRatio]    = useState<RatioKey>('free')
   const [canvasBg, setCanvasBg] = useState('transparent')
 
-  /* Deferred setters for heavy text fields → keeps typing butter-smooth */
   const setTextDeferred = useDeferredSetter(setText)
   const setMetaDeferred = useDeferredSetter(setMeta)
 
@@ -410,13 +535,12 @@ export default function BuilderClient() {
   const onTouchEnd = useCallback((e: ReactTouchEvent) => {
     if (!touchRef.current) return
     const dy = touchRef.current.startY - e.changedTouches[0].clientY
-    // Swipe up → open, swipe down → peek/close
     if (dy > 60) setDrawer(d => d === 'closed' ? 'peek' : 'open')
     else if (dy < -60) setDrawer(d => d === 'open' ? 'peek' : 'closed')
     touchRef.current = null
   }, [])
 
-  /* ── PNG export (code-split html2canvas) ── */
+  /* ── PNG export ── */
   const exportPng = useCallback(async () => {
     setRendering(true)
     try {
@@ -428,29 +552,82 @@ export default function BuilderClient() {
       let finalCanvas: HTMLCanvasElement
 
       if (ratio === 'free') {
+        /*
+         * Card-only mode: clone the card off-screen and render at 3×.
+         * Because all card styles are inline, the clone is self-contained.
+         */
+        const computedFs = parseFloat(getComputedStyle(card).fontSize) || 15
         const host = document.createElement('div')
         host.style.cssText = 'position:fixed;top:-9999px;left:-9999px;display:inline-block;background:transparent'
         const clone = card.cloneNode(true) as HTMLElement
-        clone.style.cssText = `width:${card.offsetWidth}px;background:#ffffff;border-radius:8px;box-shadow:0 1px 3px rgba(60,64,67,.15),0 4px 8px rgba(60,64,67,.1);font-family:DM Sans,Roboto,sans-serif;overflow:hidden;`
+        clone.style.cssText = [
+          `width:${card.offsetWidth}px`,
+          `font-size:${computedFs}px`,
+          `padding:${(computedFs * 1.07).toFixed(1)}px`,
+          "background:#ffffff",
+          "backdrop-filter:none",
+          "-webkit-backdrop-filter:none",
+          "border:none",
+          "border-radius:8px",
+          "box-shadow:0 1px 3px rgba(60,64,67,.15),0 4px 8px rgba(60,64,67,.1)",
+          "color:#202124",
+          "font-family:Roboto,sans-serif",
+          "position:relative",
+          "overflow:hidden",
+          "box-sizing:border-box",
+        ].join(';')
         host.appendChild(clone)
         document.body.appendChild(host)
-        finalCanvas = await html2canvas(host, { scale: 3, useCORS: true, allowTaint: true, backgroundColor: null, logging: false })
+        finalCanvas = await html2canvas(host, {
+          scale: 3,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: null,
+          logging: false,
+        })
         document.body.removeChild(host)
+
       } else {
+        /*
+         * Ratio mode: render card at exact export width, composite on background.
+         */
         const exportW = cfg.w!
         const exportH = cfg.h!
-        const cardW   = Math.round(exportW * 0.88)
-        const fontSize = Math.max(10, Math.min(28, 15 * cardW / 420))
+        const hPadFrac = 0.06
+        const exportCardW = Math.round(exportW * (1 - hPadFrac * 2))
+        const exportFontSize = Math.max(10, Math.min(28, 15 * exportCardW / 420))
 
         const host = document.createElement('div')
-        host.style.cssText = `position:fixed;top:-9999px;left:-9999px;display:inline-block;width:${cardW}px`
+        host.style.cssText = `position:fixed;top:-9999px;left:-9999px;display:inline-block;width:${exportCardW}px`
         const clone = card.cloneNode(true) as HTMLElement
-        clone.style.cssText = `width:${cardW}px;font-size:${fontSize}px;background:#ffffff;border-radius:8px;box-shadow:0 2px 8px rgba(60,64,67,.2);font-family:DM Sans,Roboto,sans-serif;box-sizing:border-box;`
+        clone.style.cssText = [
+          `width:${exportCardW}px`,
+          `font-size:${exportFontSize}px`,
+          `padding:${(exportFontSize * 1.07).toFixed(1)}px`,
+          "background:#ffffff",
+          "backdrop-filter:none",
+          "-webkit-backdrop-filter:none",
+          "border:none",
+          "border-radius:8px",
+          "box-shadow:0 2px 8px rgba(60,64,67,.2)",
+          "color:#202124",
+          "font-family:Roboto,sans-serif",
+          "position:relative",
+          "overflow:visible",
+          "box-sizing:border-box",
+        ].join(';')
         host.appendChild(clone)
         document.body.appendChild(host)
 
-        const SCALE   = 2
-        const cardBmp = await html2canvas(host, { scale: SCALE, useCORS: true, allowTaint: true, backgroundColor: null, logging: false, width: cardW })
+        const SCALE = 2
+        const cardBmp = await html2canvas(host, {
+          scale: SCALE,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: null,
+          logging: false,
+          width: exportCardW,
+        })
         document.body.removeChild(host)
 
         const out = document.createElement('canvas')
@@ -471,11 +648,13 @@ export default function BuilderClient() {
           }
         }
 
+        const cardDrawW = exportCardW
+        const cardDrawH = cardBmp.height / SCALE
         ctx.drawImage(
             cardBmp,
-            Math.round((exportW - cardW) / 2),
-            Math.round((exportH - cardBmp.height / SCALE) / 2),
-            cardW, cardBmp.height / SCALE,
+            Math.round((exportW - cardDrawW) / 2),
+            Math.round((exportH - cardDrawH) / 2),
+            cardDrawW, cardDrawH,
         )
         finalCanvas = out
       }
@@ -523,7 +702,7 @@ export default function BuilderClient() {
   const drawerHeight = drawer === 'closed' ? DRAWER_PEEK + 'px'
       : drawer === 'peek' ? '55vh' : '88vh'
 
-  /* ── Score handlers (stable refs) ── */
+  /* ── Score handlers ── */
   const toggleScore = useCallback((k: 'food' | 'service' | 'atm', v: boolean) => {
     setScores(s => ({ ...s, [k]: { ...s[k], enabled: v } }))
   }, [])
@@ -532,11 +711,10 @@ export default function BuilderClient() {
   }, [])
 
   /* ═══════════════════════════════════════════
-     SIDEBAR CONTENT — extracted as memoized JSX
+     SIDEBAR CONTENT
   ═══════════════════════════════════════════ */
   const SidebarContent = useMemo(() => (
       <>
-        {/* ── Reviewer ── */}
         <Section title="Reviewer">
           <Field label="Name">
             <input className={inputCls} value={name} onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)} placeholder="Full name" />
@@ -549,7 +727,6 @@ export default function BuilderClient() {
           </Field>
         </Section>
 
-        {/* ── Review ── */}
         <Section title="Review">
           <Field label="Rating">
             <div className="flex gap-1">
@@ -600,7 +777,6 @@ export default function BuilderClient() {
           </Field>
         </Section>
 
-        {/* ── Photos ── */}
         <Section title="Photos">
           <div className="flex gap-2">
             <input
@@ -633,7 +809,6 @@ export default function BuilderClient() {
           </div>
         </Section>
 
-        {/* ── Advanced: Scores ── */}
         {advanced && (
             <Section title="Scores (optional)">
               {(['food', 'service', 'atm'] as const).map(k => (
@@ -651,7 +826,6 @@ export default function BuilderClient() {
             </Section>
         )}
 
-        {/* ── Advanced: Background ── */}
         {advanced && (
             <Section title="Export Background">
               <div className="flex flex-wrap gap-2">
@@ -662,7 +836,6 @@ export default function BuilderClient() {
             </Section>
         )}
 
-        {/* ── Export Format ── */}
         <Section title="Export Format">
           <div className="grid grid-cols-4 gap-2">
             {(Object.entries(RATIOS) as [RatioKey, typeof RATIOS[RatioKey]][]).map(([key, val]) => (
@@ -671,7 +844,6 @@ export default function BuilderClient() {
           </div>
         </Section>
 
-        {/* ── Actions ── */}
         <div className="px-4 py-4 flex flex-col gap-2.5">
           <button
               type="button" onClick={exportPng} disabled={rendering}
@@ -813,7 +985,6 @@ export default function BuilderClient() {
                 contain: 'layout style',
               }}
           >
-            {/* Handle row – swipeable */}
             <div
                 className="flex items-center justify-between px-4 cursor-pointer select-none flex-shrink-0 touch-manipulation"
                 style={{ height: DRAWER_PEEK + 'px' }}
@@ -848,7 +1019,6 @@ export default function BuilderClient() {
               </div>
             </div>
 
-            {/* Scrollable form */}
             <div
                 className="flex-1 overflow-y-auto"
                 style={{ overscrollBehavior: 'contain', WebkitOverflowScrolling: 'touch' }}
@@ -896,7 +1066,6 @@ export default function BuilderClient() {
                     Cancel
                   </button>
                 </div>
-                {/* iOS safe area */}
                 <div className="sm:hidden h-4" />
               </div>
             </div>
