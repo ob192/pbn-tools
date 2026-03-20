@@ -27,7 +27,7 @@ export default function CTA() {
           Start building your first review card now — free, no account needed, export in 2 minutes.
         </p>
 
-        <Link href="/builder"
+        <Link href="/builder/index.html"
           className="group inline-flex items-center gap-2.5 bg-amber-500 hover:bg-amber-400 text-[#08090c] font-bold px-8 py-4 rounded-2xl transition-all hover:scale-[1.04] active:scale-[0.97] shadow-2xl shadow-amber-500/30 text-base">
           Build your review card — it's free
           <ArrowRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />

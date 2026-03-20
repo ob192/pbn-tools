@@ -86,7 +86,7 @@ export default function Hero() {
               {/* CTAs */}
               <div className="anim-fade-up delay-400 flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                 <Link
-                    href="/builder"
+                    href="/builder/index.html"
                     className="group flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-[#08090c] font-semibold px-6 py-3.5 rounded-xl transition-all hover:scale-[1.03] active:scale-[0.97] shadow-xl shadow-amber-500/25 text-sm"
                 >
                   Build your card — free

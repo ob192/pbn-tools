@@ -14,7 +14,7 @@ export default function Footer() {
           </Link>
 
           <div className="flex items-center gap-7">
-            {[['/', 'Home'], ['/builder', 'Builder'], ['#how-it-works', 'How it works'], ['#features', 'Features']].map(([href, label]) => (
+            {[['/', 'Home'], ['/builder/index.html', 'Builder'], ['#how-it-works', 'How it works'], ['#features', 'Features']].map(([href, label]) => (
               <Link key={href} href={href} className="text-xs text-white/30 hover:text-white/70 transition-colors">{label}</Link>
             ))}
           </div>

@@ -42,7 +42,7 @@ export default function Navbar() {
 
         {/* CTA */}
         <div className="hidden md:flex items-center gap-3">
-          <Link href="/builder" className="text-sm font-semibold bg-amber-500 hover:bg-amber-400 text-[#08090c] px-4 py-2 rounded-xl transition-all hover:scale-[1.03] active:scale-[0.97] shadow-lg shadow-amber-500/25">
+          <Link href="/builder/index.html" className="text-sm font-semibold bg-amber-500 hover:bg-amber-400 text-[#08090c] px-4 py-2 rounded-xl transition-all hover:scale-[1.03] active:scale-[0.97] shadow-lg shadow-amber-500/25">
             Try free →
           </Link>
         </div>

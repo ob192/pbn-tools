@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Review Card Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        /* ─────────────────────────────────────────
+           RESET
+        ───────────────────────────────────────── */
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+        /* ─────────────────────────────────────────
+           UI DESIGN TOKENS  (builder chrome only)
+        ───────────────────────────────────────── */
+        :root{
+            --b:#0d0f17;
+            --s1:#13151f;
+            --s2:#1a1d2b;
+            --s3:#20233a;
+            --bd:#252840;
+            --bd2:#2e3250;
+            --t1:#dde1f0;
+            --t2:#7880a0;
+            --ac:#5c72f5;
+            --ac2:#3fd68a;
+            --glow:rgba(92,114,245,.22);
+            --star-ui:#f5a41e;
+            --radius-ui:10px;
+        }
+
+        /* ─────────────────────────────────────────
+           GOOGLE MAPS CARD TOKENS
+           (default = authentic GM look)
+        ───────────────────────────────────────── */
+        :root{
+            --gm-bg:#ffffff;
+            --gm-border:transparent;
+            --gm-text:#202124;
+            --gm-muted:#70757a;
+            --gm-star:#fbbc04;
+            --gm-spec-bg:#f1f3f4;
+            --gm-pill-bg:#f1f3f4;
+            --gm-radius:8px;
+            --gm-shadow:0 1px 3px rgba(60,64,67,.15),0 4px 8px rgba(60,64,67,.1);
+            --canvas-bg:transparent;
+        }
+
+        html{font-size:15px}
+        body{
+            font-family:'Roboto',sans-serif;
+            background:var(--b);
+            color:var(--t1);
+            min-height:100vh;
+            -webkit-font-smoothing:antialiased;
+        }
+
+        /* ─────────────────────────────────────────
+           APP SHELL
+        ───────────────────────────────────────── */
+        .app{display:flex;flex-direction:column;min-height:100vh}
+
+        /* topbar */
+        .topbar{
+            display:flex;align-items:center;justify-content:space-between;
+            padding:11px 18px;
+            background:var(--s1);border-bottom:1px solid var(--bd);
+            position:sticky;top:0;z-index:60;flex-shrink:0;
+        }
+        .brand{display:flex;align-items:center;gap:9px;font-family:'Google Sans',sans-serif;font-size:14px;font-weight:500}
+        .brand-icon{
+            width:24px;height:24px;border-radius:7px;flex-shrink:0;
+            background:linear-gradient(135deg,var(--ac),var(--ac2));
+            box-shadow:0 0 10px var(--glow);
+            display:flex;align-items:center;justify-content:center;
+        }
+        .mode-tabs{display:flex;gap:2px;background:var(--s2);border:1px solid var(--bd);border-radius:9px;padding:3px}
+        .mtab{
+            padding:5px 14px;border-radius:7px;font-size:12px;font-weight:500;
+            cursor:pointer;color:var(--t2);border:none;background:none;
+            font-family:'Roboto',sans-serif;transition:background .15s,color .15s;
+        }
+        .mtab.on{background:var(--s3);color:var(--t1);}
+
+        /* layout */
+        .body{display:flex;flex-direction:column;flex:1}
+        @media(min-width:800px){
+            .body{flex-direction:row;height:calc(100vh - 47px);overflow:hidden}
+        }
+
+        /* sidebar */
+        .sidebar{
+            background:var(--s1);border-right:1px solid var(--bd);
+            overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--bd2) transparent;
+            display:flex;flex-direction:column;
+        }
+        @media(min-width:800px){.sidebar{width:320px;flex-shrink:0}}
+        .sidebar::-webkit-scrollbar{width:3px}
+        .sidebar::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:3px}
+
+        /* section groups */
+        .grp{border-bottom:1px solid var(--bd);padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+        .grp-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:var(--t2);margin-bottom:2px}
+
+        /* fields */
+        .f{display:flex;flex-direction:column;gap:5px}
+        .fl{font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--t2)}
+        .inp,.ta{
+            width:100%;background:var(--s2);border:1px solid var(--bd2);
+            border-radius:var(--radius-ui);padding:8px 11px;
+            font-family:'Roboto',sans-serif;font-size:13px;color:var(--t1);
+            outline:none;transition:border-color .15s,box-shadow .15s;
+            -webkit-appearance:none;
+        }
+        .inp:focus,.ta:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--glow)}
+        .inp::placeholder,.ta::placeholder{color:var(--t2);opacity:.45}
+        .ta{resize:none;min-height:68px;line-height:1.55}
+
+        /* star picker */
+        .spick{display:flex;gap:5px}
+        .spick span{
+            font-size:28px;cursor:pointer;color:var(--bd2);
+            transition:color .1s,transform .12s;line-height:1;
+        }
+        .spick span.on{color:var(--star-ui)}
+        .spick span:hover{transform:scale(1.14)}
+
+        /* ─ photos ─ */
+        .photo-area{display:flex;flex-direction:column;gap:8px}
+        .photo-add{display:flex;gap:6px}
+        .photo-url-inp{
+            flex:1;background:var(--s2);border:1px solid var(--bd2);
+            border-radius:var(--radius-ui);padding:8px 11px;font-size:13px;
+            font-family:'Roboto',sans-serif;color:var(--t1);outline:none;
+            transition:border-color .15s,box-shadow .15s;
+        }
+        .photo-url-inp:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--glow)}
+        .photo-url-inp::placeholder{color:var(--t2);opacity:.45}
+        .add-btn{
+            height:37px;padding:0 12px;border-radius:var(--radius-ui);
+            background:var(--s2);border:1px solid var(--bd2);
+            color:var(--t2);cursor:pointer;font-size:12px;font-weight:500;
+            font-family:'Roboto',sans-serif;white-space:nowrap;
+            transition:all .15s;display:flex;align-items:center;gap:5px;
+        }
+        .add-btn:hover{background:var(--ac);border-color:var(--ac);color:#fff}
+        .thumbs{display:flex;flex-wrap:wrap;gap:7px}
+        .thumb{
+            position:relative;width:54px;height:54px;
+            border-radius:8px;overflow:hidden;
+            border:1px solid var(--bd2);flex-shrink:0;
+            cursor:default;
+        }
+        .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+        .thumb-x{
+            position:absolute;top:2px;right:2px;
+            width:16px;height:16px;border-radius:50%;
+            background:rgba(0,0,0,.72);color:#fff;border:none;
+            display:flex;align-items:center;justify-content:center;
+            font-size:9px;cursor:pointer;
+            opacity:0;transition:opacity .15s;padding:0;
+        }
+        .thumb:hover .thumb-x{opacity:1}
+        .upload-tile{
+            width:54px;height:54px;border-radius:8px;
+            border:1.5px dashed var(--bd2);background:none;
+            color:var(--t2);cursor:pointer;
+            display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+            font-size:9px;font-family:'Roboto',sans-serif;
+            transition:all .15s;
+        }
+        .upload-tile:hover{border-color:var(--ac);color:var(--ac);background:var(--glow)}
+        #fileinput{display:none}
+
+        /* ─ advanced: score toggles ─ */
+        .score-row{display:flex;align-items:center;gap:10px}
+        .score-name{flex:1;font-size:13px;color:var(--t1);display:flex;align-items:center;gap:8px}
+        .tgl{position:relative;width:38px;height:22px;flex-shrink:0}
+        .tgl input{opacity:0;width:0;height:0;position:absolute}
+        .tgl-t{position:absolute;inset:0;border-radius:11px;background:var(--bd2);cursor:pointer;transition:background .2s}
+        .tgl input:checked+.tgl-t{background:var(--ac)}
+        .tgl-k{position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;pointer-events:none;transition:transform .2s}
+        .tgl input:checked~.tgl-k{transform:translateX(16px)}
+        .score-num{
+            width:50px;text-align:center;
+            background:var(--s2);border:1px solid var(--bd2);border-radius:8px;
+            padding:5px 6px;font-size:13px;color:var(--t1);outline:none;
+            transition:border-color .15s,box-shadow .15s;font-family:'Roboto',monospace;
+        }
+        .score-num:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--glow)}
+        .score-num:disabled{opacity:.22;pointer-events:none}
+
+        /* ─ advanced: swatches ─ */
+        .sw-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+        .sw{
+            width:26px;height:26px;border-radius:7px;cursor:pointer;
+            border:2px solid transparent;transition:transform .12s,border-color .12s,box-shadow .12s;
+            flex-shrink:0;
+        }
+        .sw:hover{transform:scale(1.12)}
+        .sw.sel{border-color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.25)}
+        .cpick{position:relative;width:26px;height:26px;flex-shrink:0}
+        .cpick .sw{pointer-events:none;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red)}
+        .cpick input[type=color]{opacity:0;position:absolute;inset:0;width:100%;height:100%;border:none;padding:0;cursor:pointer}
+        .sw.checker{
+            background-image:linear-gradient(45deg,#666 25%,transparent 25%),linear-gradient(-45deg,#666 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#666 75%),linear-gradient(-45deg,transparent 75%,#666 75%);
+            background-size:8px 8px;background-position:0 0,0 4px,4px -4px,-4px 0;background-color:#333;
+        }
+
+        /* slider */
+        .sl-row{display:flex;align-items:center;gap:10px}
+        .sl-row input[type=range]{flex:1;accent-color:var(--ac);cursor:pointer;height:3px}
+        .slv{font-size:11px;color:var(--t2);min-width:32px;text-align:right;font-variant-numeric:tabular-nums}
+
+        /* advanced section reveal */
+        .adv-section{display:none}
+        .adv-section.show{display:block}
+
+        /* ─ ratio picker ─ */
+        .ratio-bar{
+            display:flex;gap:6px;flex-wrap:wrap;
+        }
+        .ratio-btn{
+            flex:1;min-width:60px;
+            display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+            padding:10px 6px;
+            background:var(--s2);border:1px solid var(--bd2);border-radius:10px;
+            cursor:pointer;color:var(--t2);font-size:10px;font-weight:500;
+            font-family:'Roboto',sans-serif;letter-spacing:.04em;
+            transition:all .15s;
+        }
+        .ratio-btn:hover{border-color:var(--ac);color:var(--t1)}
+        .ratio-btn.on{border-color:var(--ac);background:var(--s3);color:var(--t1);box-shadow:0 0 0 1px var(--ac)}
+        .ratio-icon{
+            border:1.5px solid currentColor;border-radius:3px;
+            background:transparent;flex-shrink:0;
+        }
+
+        /* canvas-frame: the export container shown in preview */
+        .canvas-frame{
+            position:relative;
+            display:flex;align-items:flex-start;justify-content:center;
+            overflow:hidden;
+            border-radius:12px;
+            transition:width .3s cubic-bezier(.4,0,.2,1), height .3s cubic-bezier(.4,0,.2,1), border-radius .2s;
+            flex-shrink:0;
+        }
+        .canvas-frame.checker-bg::before{
+            content:'';position:absolute;inset:0;
+            background-image:linear-gradient(45deg,#20233a 25%,transparent 25%),linear-gradient(-45deg,#20233a 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#20233a 75%),linear-gradient(-45deg,transparent 75%,#20233a 75%);
+            background-size:14px 14px;background-position:0 0,0 7px,7px -7px,-7px 0;background-color:#171a2b;
+            z-index:0;pointer-events:none;
+        }
+        /* card-stage: centers card, fills frame width */
+        .canvas-frame .card-stage{
+            position:relative;z-index:1;
+            width:100%;height:100%;
+            display:flex;align-items:center;justify-content:center;
+            padding:0;overflow-y:auto;
+        }
+        .canvas-frame .card-stage::before{ display:none; }
+
+        /* In free (card-only) mode the frame has no fixed size */
+        .canvas-frame.ratio-free{
+            border-radius:calc(var(--gm-radius) + 2px);
+            overflow:visible;
+        }
+        .canvas-frame.ratio-free .card-stage{
+            width:auto;height:auto;overflow:visible;
+        }
+        .canvas-frame.ratio-free .gm-card{
+            width:min(480px,92vw);
+        }
+
+        /* ─ actions ─ */
+        .actions{padding:14px 18px;display:flex;flex-direction:column;gap:7px;margin-top:auto;border-top:1px solid var(--bd)}
+        .btn{
+            width:100%;padding:11px 14px;border:none;border-radius:var(--radius-ui);
+            font-family:'Google Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;
+            display:flex;align-items:center;justify-content:center;gap:8px;
+            transition:opacity .15s,transform .12s;
+        }
+        .btn:hover{opacity:.88;transform:translateY(-1px)}
+        .btn:active{transform:translateY(0)}
+        .btn-dl{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;box-shadow:0 4px 16px var(--glow)}
+        .btn-dl.busy{opacity:.6;pointer-events:none}
+        .btn-ghost{background:var(--s2);border:1px solid var(--bd2);color:var(--t2)}
+        .btn-ghost:hover{color:var(--t1);border-color:var(--bd)}
+
+        /* ─────────────────────────────────────────
+           PREVIEW STAGE
+        ───────────────────────────────────────── */
+        .preview{
+            flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+            padding:40px 20px 48px;overflow-y:auto;
+            background:
+                    radial-gradient(ellipse at 20% 20%,rgba(92,114,245,.06) 0,transparent 50%),
+                    radial-gradient(ellipse at 80% 80%,rgba(63,214,138,.04) 0,transparent 50%),
+                    var(--b);
+            scrollbar-width:thin;scrollbar-color:var(--bd2) transparent;
+        }
+        .preview::-webkit-scrollbar{width:3px}
+        .preview::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:3px}
+        .preview-hint{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--t2);margin-bottom:24px;font-weight:500}
+
+        /* card-stage default (only used in free/card-only mode) */
+        .card-stage{position:relative;border-radius:calc(var(--gm-radius) + 2px)}
+        .card-stage-checker::before{
+            content:'';position:absolute;inset:0;border-radius:inherit;
+            background-image:linear-gradient(45deg,#20233a 25%,transparent 25%),linear-gradient(-45deg,#20233a 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#20233a 75%),linear-gradient(-45deg,transparent 75%,#20233a 75%);
+            background-size:14px 14px;background-position:0 0,0 7px,7px -7px,-7px 0;background-color:#171a2b;
+            z-index:-1;
+        }
+
+        /* ─────────────────────────────────────────
+           GOOGLE MAPS REVIEW CARD  (authentic)
+        ───────────────────────────────────────── */
+        .gm-card{
+            width:100%;
+            background:var(--gm-bg);
+            border:1px solid var(--gm-border);
+            border-radius:var(--gm-radius);
+            padding:1.07em;
+            color:var(--gm-text);
+            box-shadow:var(--gm-shadow);
+            font-family:'Roboto',sans-serif;
+            transition:background .25s,border-color .25s,border-radius .25s,color .25s,box-shadow .25s;
+            position:relative;
+        }
+
+        /* card header */
+        .gm-header{display:flex;justify-content:space-between;align-items:flex-start}
+        .gm-user{display:flex;align-items:center;gap:.8em}
+        .gm-aw{position:relative;flex-shrink:0}
+        .gm-av{width:2.67em;height:2.67em;border-radius:50%;object-fit:cover;display:block}
+        .gm-badge{
+            position:absolute;bottom:-.07em;right:-.07em;
+            width:.93em;height:.93em;background:#ff6d00;
+            border:2px solid var(--gm-bg);border-radius:50%;
+            display:flex;align-items:center;justify-content:center;
+            transition:border-color .25s;
+        }
+        .gm-name{font-size:.93em;font-weight:500;color:var(--gm-text);display:block;letter-spacing:.01em}
+        .gm-meta{font-size:.8em;color:var(--gm-muted);margin-top:.1em;display:block}
+        .gm-google{flex-shrink:0;opacity:.85;width:1.33em;height:1.33em}
+
+        /* stars row */
+        .gm-stars-row{display:flex;align-items:center;margin-top:.27em;gap:0}
+        .gm-stars{font-size:1.07em;letter-spacing:-.1em;margin-right:.53em;line-height:1}
+        .gm-son{color:var(--gm-star)}.gm-soff{color:#dadce0}
+        .gm-date{font-size:.8em;color:var(--gm-muted)}
+
+        /* price */
+        .gm-price{font-size:.87em;color:#3c4043;margin-top:.27em}
+
+        /* review text */
+        .gm-text{font-size:.93em;line-height:1.43;margin-top:.53em;color:#3c4043}
+
+        /* specifics */
+        .gm-spec{
+            background:var(--gm-spec-bg);border-radius:.7em;
+            padding:.65em 1em;margin-top:.9em;
+            font-size:.87em;color:#3c4043;
+            display:inline-flex;align-items:center;flex-wrap:wrap;gap:.27em;
+            transition:background .25s;
+        }
+        .gm-div{color:#bdc1c6;margin:0 .6em;font-weight:300}
+
+        /* photos — adaptive grid that always fills the card width */
+        .gm-photos{
+            display:grid;
+            gap:.4em;
+            margin-top:1em;
+            grid-template-columns:repeat(var(--photo-cols,3),1fr);
+        }
+        .gm-photo{
+            width:100%;
+            aspect-ratio:1/1;
+            border-radius:.4em;
+            object-fit:cover;
+            border:1px solid rgba(0,0,0,.05);
+            display:block;
+            min-height:0;
+        }
+
+
+
+        /* footer */
+        .gm-footer{margin-top:1.33em;display:flex;align-items:center;gap:1.6em}
+        .gm-pill{
+            display:flex;align-items:center;gap:.53em;cursor:pointer;
+            transition:opacity .2s;background:none;border:none;padding:0;
+            font-family:'Roboto',sans-serif;font-size:.87em;font-weight:500;color:#3c4043;
+        }
+        .gm-pill:hover{opacity:.7}
+        .gm-pill.liked .hrt{fill:#d93025}
+        .gm-pill.liked .gm-like-count{color:#3c4043}
+        .hrt{fill:#70757a;transition:fill .2s;width:1.2em;height:1.2em}
+
+        /* ─────────────────────────────────────────
+           DOWNLOAD MODAL
+        ───────────────────────────────────────── */
+        .overlay{
+            position:fixed;inset:0;background:rgba(0,0,0,.78);
+            backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+            display:flex;align-items:center;justify-content:center;
+            z-index:200;opacity:0;pointer-events:none;
+            transition:opacity .22s;padding:20px;
+        }
+        .overlay.on{opacity:1;pointer-events:all}
+        .modal{
+            background:#161820;border:1px solid var(--bd2);border-radius:18px;
+            padding:22px;width:100%;max-width:460px;
+            display:flex;flex-direction:column;align-items:center;gap:16px;
+            box-shadow:0 40px 80px rgba(0,0,0,.55);
+            transform:translateY(14px);transition:transform .22s;
+        }
+        .overlay.on .modal{transform:translateY(0)}
+        .modal-ttl{font-size:15px;font-weight:500;align-self:flex-start;font-family:'Google Sans',sans-serif}
+        .modal-sub{font-size:12px;color:var(--t2);margin-top:-10px;align-self:flex-start}
+        .modal-img{
+            max-width:100%;max-height:280px;border-radius:10px;
+            border:1px solid var(--bd2);object-fit:contain;
+            background:linear-gradient(45deg,#1e2030 25%,transparent 25%),linear-gradient(-45deg,#1e2030 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#1e2030 75%),linear-gradient(-45deg,transparent 75%,#1e2030 75%);
+            background-size:12px 12px;background-position:0 0,0 6px,6px -6px,-6px 0;background-color:#14151e;
+        }
+        .modal-acts{display:flex;gap:8px;align-self:stretch}
+        .modal-acts .btn{flex:1}
+        .btn-save{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff}
+        .btn-cancl{background:var(--s2);border:1px solid var(--bd2);color:var(--t2)}
+
+        /* toast */
+        .toast{
+            position:fixed;bottom:22px;left:50%;
+            transform:translateX(-50%) translateY(8px);
+            background:var(--s1);border:1px solid var(--bd2);border-radius:9px;
+            padding:8px 18px;font-size:13px;font-weight:500;color:var(--t1);
+            opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;
+            z-index:300;white-space:nowrap;
+        }
+        .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .spin{animation:spin .85s linear infinite}
+    </style>
+</head>
+<body>
+<div class="app">
+
+    <!-- ── TOP BAR ── -->
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            Review Card Builder
+        </div>
+        <div class="mode-tabs">
+            <button class="mtab on" id="tab-basic"    onclick="setMode('basic')">Basic</button>
+            <button class="mtab"    id="tab-advanced" onclick="setMode('advanced')">Advanced</button>
+        </div>
+    </header>
+
+    <div class="body">
+
+        <!-- ══════════════════════════════
+             SIDEBAR
+        ══════════════════════════════ -->
+        <aside class="sidebar">
+
+            <!-- REVIEWER -->
+            <div class="grp">
+                <div class="grp-title">Reviewer</div>
+                <div class="f">
+                    <label class="fl">Name</label>
+                    <input class="inp" id="i-name" value="Anastasiia Koval" placeholder="Full name"/>
+                </div>
+                <div class="f">
+                    <label class="fl">Meta line</label>
+                    <input class="inp" id="i-meta" value="Local Guide · 23 reviews · 14 photos" placeholder="Local Guide · N reviews"/>
+                </div>
+                <div class="f">
+                    <label class="fl">Avatar URL <span style="opacity:.4;font-size:10px">(leave blank for initials)</span></label>
+                    <input class="inp" id="i-avatar" type="url" placeholder="https://…"/>
+                </div>
+            </div>
+
+            <!-- REVIEW -->
+            <div class="grp">
+                <div class="grp-title">Review</div>
+                <div class="f">
+                    <label class="fl">Rating</label>
+                    <div class="spick" id="spick">
+                        <span data-v="1">★</span><span data-v="2">★</span>
+                        <span data-v="3">★</span><span data-v="4">★</span>
+                        <span data-v="5" class="on">★</span>
+                    </div>
+                </div>
+                <div class="f">
+                    <label class="fl">Date</label>
+                    <input class="inp" id="i-date" value="2 weeks ago"/>
+                </div>
+                <div class="f">
+                    <label class="fl">Review text</label>
+                    <textarea class="ta" id="i-review">Amazing spot! The latte art is stunning and the pastries are out of this world fresh. Cozy atmosphere, friendly staff — will definitely be back.</textarea>
+                </div>
+                <div class="f">
+                    <label class="fl">Price range <span style="opacity:.4;font-size:10px">(optional)</span></label>
+                    <div style="display:flex;gap:6px">
+                        <select class="inp" id="i-currency" style="width:auto;flex-shrink:0;padding:8px 10px;cursor:pointer">
+                            <option value="">—</option>
+                            <option value="₴">₴ UAH</option>
+                            <option value="$">$ USD</option>
+                            <option value="€">€ EUR</option>
+                            <option value="£">£ GBP</option>
+                        </select>
+                        <input class="inp" id="i-price" value="" placeholder="e.g. 100–300"/>
+                    </div>
+                </div>
+                <div class="f">
+                    <label class="fl">Likes</label>
+                    <input class="inp" id="i-likes" type="number" min="0" value="4"/>
+                </div>
+            </div>
+
+            <!-- PHOTOS -->
+            <div class="grp">
+                <div class="grp-title">Photos</div>
+                <div class="photo-area">
+                    <div class="photo-add">
+                        <input class="photo-url-inp" id="i-photo-url" type="url" placeholder="Paste image URL…"/>
+                        <button class="add-btn" onclick="addPhotoUrl()">Add</button>
+                    </div>
+                    <div class="thumbs" id="thumbs">
+                        <button class="upload-tile" onclick="document.getElementById('fileinput').click()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20h14v-2H5v2zm7-18l-5 5h3v4h4v-4h3L12 2z"/></svg>
+                            Upload
+                        </button>
+                    </div>
+                    <input type="file" id="fileinput" accept="image/*" multiple/>
+                </div>
+            </div>
+
+            <!-- ── ADVANCED SECTIONS ── -->
+
+            <!-- SCORES (advanced only, all OFF by default) -->
+            <div class="adv-section grp" id="adv-scores">
+                <div class="grp-title">Scores <span style="font-size:10px;opacity:.5;text-transform:none;letter-spacing:0">(optional)</span></div>
+                <div class="score-row">
+      <span class="score-name">
+        <label class="tgl"><input type="checkbox" id="t-food"><span class="tgl-t"></span><span class="tgl-k"></span></label>
+        Food
+      </span>
+                    <input class="score-num" id="i-food" type="number" min="1" max="5" value="5" disabled/>
+                </div>
+                <div class="score-row">
+      <span class="score-name">
+        <label class="tgl"><input type="checkbox" id="t-service"><span class="tgl-t"></span><span class="tgl-k"></span></label>
+        Service
+      </span>
+                    <input class="score-num" id="i-service" type="number" min="1" max="5" value="5" disabled/>
+                </div>
+                <div class="score-row">
+      <span class="score-name">
+        <label class="tgl"><input type="checkbox" id="t-atm"><span class="tgl-t"></span><span class="tgl-k"></span></label>
+        Atmosphere
+      </span>
+                    <input class="score-num" id="i-atm" type="number" min="1" max="5" value="5" disabled/>
+                </div>
+            </div>
+
+            <!-- CARD THEME (advanced only) — export background only -->
+            <div class="adv-section grp" id="adv-theme">
+                <div class="grp-title">Export Background</div>
+                <div class="sw-row" id="sw-canvas">
+                    <div class="sw checker sel" onclick="setCanvasBg(this,'transparent')" title="Transparent (PNG alpha)"></div>
+                    <div class="sw" style="background:#ffffff" onclick="setCanvasBg(this,'#ffffff')" title="White"></div>
+                    <div class="sw" style="background:#000000" onclick="setCanvasBg(this,'#000000')" title="Black"></div>
+                    <div class="sw" style="background:#1a1a2e" onclick="setCanvasBg(this,'#1a1a2e')" title="Midnight"></div>
+                    <div class="sw" style="background:#0d1117" onclick="setCanvasBg(this,'#0d1117')" title="Obsidian"></div>
+                    <div class="sw" style="background:#1e2a1e" onclick="setCanvasBg(this,'#1e2a1e')" title="Forest"></div>
+                    <div class="sw" style="background:#2d1b3d" onclick="setCanvasBg(this,'#2d1b3d')" title="Plum"></div>
+                    <div class="sw" style="background:linear-gradient(135deg,#667eea,#764ba2)" onclick="setCanvasBg(this,'linear-gradient(135deg,#667eea,#764ba2)')" title="Purple"></div>
+                    <div class="sw" style="background:linear-gradient(135deg,#f093fb,#f5576c)" onclick="setCanvasBg(this,'linear-gradient(135deg,#f093fb,#f5576c)')" title="Pink"></div>
+                    <div class="sw" style="background:linear-gradient(135deg,#4facfe,#00f2fe)" onclick="setCanvasBg(this,'linear-gradient(135deg,#4facfe,#00f2fe)')" title="Sky"></div>
+                    <div class="sw" style="background:linear-gradient(135deg,#43e97b,#38f9d7)" onclick="setCanvasBg(this,'linear-gradient(135deg,#43e97b,#38f9d7)')" title="Mint"></div>
+                    <div class="sw" style="background:linear-gradient(135deg,#fa8231,#f7b731)" onclick="setCanvasBg(this,'linear-gradient(135deg,#fa8231,#f7b731)')" title="Sunrise"></div>
+                    <div class="cpick" title="Custom color">
+                        <div class="sw" id="canvas-csw" style="background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red)"></div>
+                        <input type="color" id="canvas-cpick" value="#ffffff" oninput="onCanvasBgCustom(this.value)"/>
+                    </div>
+                </div>
+            </div><!-- /adv-theme -->
+
+            <!-- EXPORT FORMAT — always visible -->
+            <div class="grp" id="grp-ratio">
+                <div class="grp-title">Export Format</div>
+                <div class="ratio-bar" id="ratio-bar">
+
+                    <button class="ratio-btn on" data-ratio="free" onclick="setRatio(this,'free')">
+                        <div class="ratio-icon" style="width:22px;height:16px"></div>
+                        Card only
+                    </button>
+
+                    <button class="ratio-btn" data-ratio="square" onclick="setRatio(this,'square')">
+                        <div class="ratio-icon" style="width:18px;height:18px"></div>
+                        1 : 1
+                    </button>
+                    <button class="ratio-btn" data-ratio="portrait" onclick="setRatio(this,'portrait')">
+                        <div class="ratio-icon" style="width:13px;height:22px"></div>
+                        9 : 16
+                    </button>
+
+                    <button class="ratio-btn" data-ratio="portrait43" onclick="setRatio(this,'portrait43')">
+                        <div class="ratio-icon" style="width:15px;height:20px"></div>
+                        4 : 5
+                    </button>
+
+                </div>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="actions">
+                <button class="btn btn-dl" id="btn-dl">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5v-2z"/></svg>
+                    Download PNG
+                </button>
+                <button class="btn btn-ghost" id="btn-copy">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                    Copy HTML
+                </button>
+            </div>
+
+        </aside>
+
+        <!-- ══════════════════════════════
+             PREVIEW
+        ══════════════════════════════ -->
+        <main class="preview">
+            <p class="preview-hint">Live Preview</p>
+            <div class="canvas-frame checker-bg" id="canvas-frame">
+                <div class="card-stage" id="card-stage">
+
+                    <div class="gm-card" id="gm-card">
+
+                        <!-- Header -->
+                        <div class="gm-header">
+                            <div class="gm-user">
+                                <div class="gm-aw">
+                                    <img class="gm-av" id="c-av" src="" alt=""/>
+                                    <div class="gm-badge" id="c-badge">
+                                        <svg width="8" height="8" viewBox="0 0 24 24" fill="white"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span class="gm-name" id="c-name">Anastasiia Koval</span>
+                                    <span class="gm-meta" id="c-meta">Local Guide · 23 reviews · 14 photos</span>
+                                </div>
+                            </div>
+                            <!-- Google G logo -->
+                            <svg class="gm-google" width="20" height="20" viewBox="0 0 24 24">
+                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                            </svg>
+                        </div>
+
+                        <!-- Stars row -->
+                        <div class="gm-stars-row">
+                            <div class="gm-stars" id="c-stars">
+                                <span class="gm-son">★</span><span class="gm-son">★</span><span class="gm-son">★</span><span class="gm-son">★</span><span class="gm-son">★</span>
+                            </div>
+                            <span class="gm-date" id="c-date">2 weeks ago</span>
+                        </div>
+
+                        <div class="gm-price" id="c-price" style="display:none"></div>
+                        <div class="gm-text" id="c-text">Amazing spot! The latte art is stunning and the pastries are out of this world fresh. Cozy atmosphere, friendly staff — will definitely be back.</div>
+
+                        <!-- Specifics bar — hidden by default, shown when scores enabled -->
+                        <div class="gm-spec" id="c-spec" style="display:none"></div>
+
+                        <!-- Photos -->
+                        <div class="gm-photos" id="c-photos" style="display:none"></div>
+
+                        <!-- Footer -->
+                        <div class="gm-footer">
+                            <button class="gm-pill liked" id="c-like">
+                                <svg class="hrt" width="18" height="18" viewBox="0 0 24 24" fill="#d93025">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                </svg>
+                                <span class="gm-like-count" id="c-likes">4</span>
+                            </button>
+                            <button class="gm-pill">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#70757a"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
+                            </button>
+                        </div>
+
+                    </div><!-- /gm-card -->
+                </div><!-- /card-stage -->
+            </div><!-- /canvas-frame -->
+        </main>
+
+    </div><!-- /body -->
+</div><!-- /app -->
+
+<!-- DOWNLOAD MODAL -->
+<div class="overlay" id="overlay">
+    <div class="modal">
+        <div class="modal-ttl">Ready to download</div>
+        <div class="modal-sub" id="m-sub">Transparent PNG · 3× resolution</div>
+        <img class="modal-img" id="m-img" src="" alt="preview"/>
+        <div class="modal-acts">
+            <button class="btn btn-save" id="btn-save">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5v-2z"/></svg>
+                Save PNG
+            </button>
+            <button class="btn btn-cancl" id="btn-cancl">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast">Done!</div>
+
+<script>
+    /* ══════════════════════════════════
+       STATE
+    ══════════════════════════════════ */
+    let nStars   = 5;
+    let photos   = [];
+    let pngData  = null;
+    let isLiked  = true;
+    let ratio    = 'free';
+    let canvasBg = 'transparent';
+
+    /* ══════════════════════════════════
+       MODE TOGGLE
+    ══════════════════════════════════ */
+    function setMode(m){
+        mode = m;
+        document.getElementById('tab-basic').classList.toggle('on', m==='basic');
+        document.getElementById('tab-advanced').classList.toggle('on', m==='advanced');
+        document.querySelectorAll('.adv-section').forEach(el => el.classList.toggle('show', m==='advanced'));
+    }
+
+    /* ══════════════════════════════════
+       STAR PICKER
+    ══════════════════════════════════ */
+    const spans = document.querySelectorAll('#spick span');
+    spans.forEach(s => {
+        s.addEventListener('click',      () => { nStars=+s.dataset.v; drawPicker(); sync(); });
+        s.addEventListener('mouseenter', () => spans.forEach(x=>x.classList.toggle('on',+x.dataset.v<=+s.dataset.v)));
+        s.addEventListener('mouseleave', drawPicker);
+    });
+    function drawPicker(){ spans.forEach(s=>s.classList.toggle('on',+s.dataset.v<=nStars)); }
+
+    /* ══════════════════════════════════
+       AVATAR
+    ══════════════════════════════════ */
+    function drawAvatar(){
+        const url  = document.getElementById('i-avatar').value.trim();
+        const name = document.getElementById('i-name').value.trim();
+        const el   = document.getElementById('c-av');
+        if(url){ el.src=url; return; }
+        const cv=document.createElement('canvas'); cv.width=cv.height=80;
+        const cx=cv.getContext('2d');
+        // Google-style avatar palette
+        const pal=['#1a73e8','#ea4335','#34a853','#fbbc04','#9c27b0','#ff6d00','#00acc1'];
+        cx.fillStyle=pal[(name.charCodeAt(0)||65)%pal.length];
+        cx.beginPath(); cx.arc(40,40,40,0,Math.PI*2); cx.fill();
+        cx.fillStyle='#fff';
+        cx.font='bold 26px Google Sans,Roboto,sans-serif';
+        cx.textAlign='center'; cx.textBaseline='middle';
+        cx.fillText((name.split(' ').map(w=>w[0]||'').slice(0,1).join('')).toUpperCase()||'?',40,40);
+        el.src=cv.toDataURL();
+    }
+
+    /* ══════════════════════════════════
+       PHOTOS
+    ══════════════════════════════════ */
+    function addPhotoUrl(){
+        const v=document.getElementById('i-photo-url').value.trim();
+        if(!v) return;
+        photos.push({url:v});
+        document.getElementById('i-photo-url').value='';
+        drawThumbs(); sync();
+    }
+    document.getElementById('i-photo-url').addEventListener('keydown',e=>{ if(e.key==='Enter') addPhotoUrl(); });
+
+    document.getElementById('fileinput').addEventListener('change',e=>{
+        const files=[...e.target.files]; let n=0;
+        files.forEach(f=>{
+            const r=new FileReader();
+            r.onload=ev=>{ photos.push({url:ev.target.result}); if(++n===files.length){drawThumbs();sync();} };
+            r.readAsDataURL(f);
+        });
+        e.target.value='';
+    });
+
+    window.rmPhoto=function(i){ photos.splice(i,1); drawThumbs(); sync(); };
+
+    function drawThumbs(){
+        const w=document.getElementById('thumbs');
+        w.innerHTML='';
+        photos.forEach((p,i)=>{
+            const d=document.createElement('div'); d.className='thumb';
+            d.innerHTML=`<img src="${p.url}" alt=""/><button class="thumb-x" onclick="rmPhoto(${i})">✕</button>`;
+            w.appendChild(d);
+        });
+        const ub=document.createElement('button');
+        ub.className='upload-tile';
+        ub.onclick=()=>document.getElementById('fileinput').click();
+        ub.innerHTML=`<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20h14v-2H5v2zm7-18l-5 5h3v4h4v-4h3L12 2z"/></svg>Upload`;
+        w.appendChild(ub);
+    }
+
+    /* ══════════════════════════════════
+       SCORE TOGGLES
+    ══════════════════════════════════ */
+    ['food','service','atm'].forEach(k=>{
+        const t=document.getElementById(`t-${k}`);
+        const n=document.getElementById(`i-${k}`);
+        t.addEventListener('change',()=>{ n.disabled=!t.checked; sync(); });
+        n.addEventListener('input', sync);
+    });
+
+    /* ══════════════════════════════════
+       SYNC CARD
+    ══════════════════════════════════ */
+    function sync(){
+        document.getElementById('c-name').textContent = document.getElementById('i-name').value;
+        document.getElementById('c-meta').textContent = document.getElementById('i-meta').value;
+        document.getElementById('c-date').textContent = document.getElementById('i-date').value;
+        document.getElementById('c-text').textContent = document.getElementById('i-review').value;
+        document.getElementById('c-likes').textContent= document.getElementById('i-likes').value;
+
+        const currency = document.getElementById('i-currency').value;
+        const priceAmt = document.getElementById('i-price').value.trim();
+        const priceStr = currency && priceAmt ? currency + priceAmt : (priceAmt || '');
+        const pel = document.getElementById('c-price');
+        pel.textContent = priceStr; pel.style.display = priceStr ? '' : 'none';
+
+        // stars
+        let sh='';
+        for(let i=1;i<=5;i++) sh+=`<span class="${i<=nStars?'gm-son':'gm-soff'}">★</span>`;
+        document.getElementById('c-stars').innerHTML=sh;
+
+        // specifics (only if advanced + at least one on)
+        const defs=[{t:'t-food',n:'i-food',l:'Food'},{t:'t-service',n:'i-service',l:'Service'},{t:'t-atm',n:'i-atm',l:'Atmosphere'}];
+        const parts=defs.filter(d=>document.getElementById(d.t).checked).map(d=>`${d.l}: ${document.getElementById(d.n).value}/5`);
+        const spec=document.getElementById('c-spec');
+        if(parts.length){
+            spec.innerHTML=parts.map((p,i)=>i<parts.length-1?p+`<span class="gm-div">|</span>`:p).join('');
+            spec.style.display='';
+        } else {
+            spec.style.display='none';
+        }
+
+        // photos — adaptive grid columns
+        const grid = document.getElementById('c-photos');
+        grid.innerHTML = '';
+        photos.forEach(p => {
+            const img = document.createElement('img');
+            img.className = 'gm-photo';
+            img.src = p.url;
+            grid.appendChild(img);
+        });
+        const cols = photos.length === 1 ? 1 : photos.length === 2 ? 2 : 3;
+        grid.style.setProperty('--photo-cols', cols);
+        grid.style.display = photos.length ? '' : 'none';
+
+
+        drawAvatar();
+    }
+
+    /* ══════════════════════════════════
+       RATIO + CANVAS BACKGROUND
+    ══════════════════════════════════ */
+    const RATIOS = {
+        free:       { w:null, h:null,  ar:null,         label:'Card only' },
+        square:     { w:1080, h:1080,  ar:1,             label:'1:1 Square' },
+        portrait:   { w:1080, h:1920,  ar:9/16,          label:'9:16 Reels/Story' },
+        portrait43: { w:1080, h:1350,  ar:4/5,           label:'4:5 Portrait' },
+    };
+
+    /* Max size the preview frame can occupy on screen */
+    const PREV_MAX_W = 480;
+    const PREV_MAX_H = 520;
+
+    function setRatio(el, r) {
+        document.querySelectorAll('.ratio-btn').forEach(b => b.classList.remove('on'));
+        el.classList.add('on');
+        ratio = r;
+        applyRatio();
+    }
+
+    function applyRatio() {
+        const frame = document.getElementById('canvas-frame');
+        const stage = document.getElementById('card-stage');
+        const card  = document.getElementById('gm-card');
+        const cfg   = RATIOS[ratio];
+
+        if (ratio === 'free') {
+            frame.classList.add('ratio-free');
+            frame.style.width  = '';
+            frame.style.height = '';
+            card.style.fontSize = '';
+            card.style.padding  = '';
+            stage.style.padding = '';
+
+        } else {
+            frame.classList.remove('ratio-free');
+
+            const ar = cfg.ar;
+            let dispW, dispH;
+            if (ar >= 1) {
+                dispW = Math.min(PREV_MAX_W, PREV_MAX_H * ar);
+                dispH = dispW / ar;
+            } else {
+                dispH = Math.min(PREV_MAX_H, PREV_MAX_W / ar);
+                dispW = dispH * ar;
+            }
+            dispW = Math.round(dispW);
+            dispH = Math.round(dispH);
+
+            frame.style.width  = dispW + 'px';
+            frame.style.height = dispH + 'px';
+
+            const hPad  = Math.round(dispW * 0.06);
+            const vPad  = Math.round(dispH * 0.05);
+            stage.style.padding = `${vPad}px ${hPad}px`;
+            stage.style.alignItems = 'center';
+
+            const cardW    = dispW - hPad * 2;
+            const fontSize = Math.max(9, Math.min(18, 15 * cardW / 420));
+            card.style.fontSize = fontSize.toFixed(2) + 'px';
+            card.style.padding  = (fontSize * 1.07).toFixed(1) + 'px';
+        }
+
+        /* Update photo grid columns */
+        const grid = document.getElementById('c-photos');
+        const cols = photos.length === 1 ? 1 : photos.length === 2 ? 2 : 3;
+        grid.style.setProperty('--photo-cols', cols);
+
+        applyCanvasBg();
+    }
+
+    function applyCanvasBg() {
+        const frame    = document.getElementById('canvas-frame');
+        const isTransp = canvasBg === 'transparent';
+        const isGrad   = !isTransp && (canvasBg.startsWith('linear') || canvasBg.startsWith('radial'));
+
+        if (isTransp) {
+            frame.style.background = '';
+            if (ratio === 'free') {
+                /* In free mode show checker on the card-stage wrapper, not the whole frame */
+                document.getElementById('card-stage').classList.add('card-stage-checker');
+                frame.classList.remove('checker-bg');
+            } else {
+                frame.classList.add('checker-bg');
+                document.getElementById('card-stage').classList.remove('card-stage-checker');
+            }
+        } else {
+            frame.style.background = canvasBg;
+            frame.classList.remove('checker-bg');
+            document.getElementById('card-stage').classList.remove('card-stage-checker');
+        }
+    }
+
+    function setCanvasBg(el, v) {
+        document.querySelectorAll('#sw-canvas .sw').forEach(s => s.classList.remove('sel'));
+        el.classList.add('sel');
+        canvasBg = v;
+        applyCanvasBg();
+    }
+
+    function onCanvasBgCustom(v) {
+        document.getElementById('canvas-csw').style.background = v;
+        document.querySelectorAll('#sw-canvas .sw').forEach(s => s.classList.remove('sel'));
+        canvasBg = v;
+        applyCanvasBg();
+    }
+
+    /* ══════════════════════════════════
+       DOWNLOAD PNG
+    ══════════════════════════════════ */
+    document.getElementById('btn-dl').addEventListener('click', async () => {
+        const btn = document.getElementById('btn-dl');
+        btn.classList.add('busy');
+        btn.innerHTML = `<svg class="spin" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V2A10 10 0 0 0 2 12h2a8 8 0 0 1 8-8z"/></svg>Rendering…`;
+
+        const frame = document.getElementById('canvas-frame');
+        const card  = document.getElementById('gm-card');
+        const cfg   = RATIOS[ratio];
+
+        try {
+            let finalCanvas;
+
+            if (ratio === 'free') {
+                /* ── Card only: capture card element at 3× ── */
+                /* Build off-screen clone with explicit px sizes */
+                const computedFs = parseFloat(getComputedStyle(card).fontSize) || 15;
+                const host = document.createElement('div');
+                host.style.cssText = 'position:fixed;top:-9999px;left:-9999px;display:inline-block;background:transparent';
+                const clone = card.cloneNode(true);
+                clone.style.cssText = [
+                    `width:${card.offsetWidth}px`,
+                    `font-size:${computedFs}px`,
+                    `padding:${computedFs * 1.07}px`,
+                    'background:#ffffff',
+                    'backdrop-filter:none',
+                    '-webkit-backdrop-filter:none',
+                    'border:none',
+                    'border-radius:8px',
+                    'box-shadow:0 1px 3px rgba(60,64,67,.15),0 4px 8px rgba(60,64,67,.1)',
+                    'color:#202124',
+                    'font-family:Roboto,sans-serif',
+                    'position:relative',
+                    'overflow:hidden',
+                ].join(';');
+                host.appendChild(clone);
+                document.body.appendChild(host);
+                finalCanvas = await html2canvas(host, {
+                    scale:3, useCORS:true, allowTaint:true, backgroundColor:null, logging:false,
+                });
+                document.body.removeChild(host);
+
+            } else {
+                /* ── Ratio mode ──
+                   Render the card off-screen at exact export width so nothing gets clipped,
+                   then composite it centered on the background canvas.
+                */
+                const exportW = cfg.w;
+                const exportH = cfg.h;
+
+                /* Card occupies 88% of export width, centered */
+                const hPadFrac = 0.06;
+                const exportCardW = Math.round(exportW * (1 - hPadFrac * 2));
+
+                /* Font size at export resolution: same proportion as preview */
+                const exportFontSize = Math.max(10, Math.min(28, 15 * exportCardW / 420));
+
+                const host = document.createElement('div');
+                host.style.cssText = `position:fixed;top:-9999px;left:-9999px;display:inline-block;width:${exportCardW}px`;
+                const clone = card.cloneNode(true);
+                clone.style.cssText = [
+                    `width:${exportCardW}px`,
+                    `font-size:${exportFontSize}px`,
+                    `padding:${(exportFontSize * 1.07).toFixed(1)}px`,
+                    'background:#ffffff',
+                    'backdrop-filter:none',
+                    '-webkit-backdrop-filter:none',
+                    'border:none',
+                    'border-radius:8px',
+                    'box-shadow:0 2px 8px rgba(60,64,67,.2)',
+                    'color:#202124',
+                    'font-family:Roboto,sans-serif',
+                    'position:relative',
+                    'overflow:visible',
+                    'box-sizing:border-box',
+                ].join(';');
+                /* Fix photo grid column count on clone */
+                const cloneGrid = clone.querySelector('.gm-photos');
+                if (cloneGrid) {
+                    const exportCols = photos.length === 1 ? 1 : photos.length === 2 ? 2 : 3;
+                    cloneGrid.style.setProperty('--photo-cols', exportCols);
+                }
+                host.appendChild(clone);
+                document.body.appendChild(host);
+
+                /* Render card at 2× for sharpness */
+                const CARD_SCALE = 2;
+                const cardBmp = await html2canvas(host, {
+                    scale: CARD_SCALE,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: null,
+                    logging: false,
+                    width: exportCardW,
+                });
+                document.body.removeChild(host);
+
+                /* Compose onto final canvas */
+                const out = document.createElement('canvas');
+                out.width  = exportW;
+                out.height = exportH;
+                const ctx = out.getContext('2d');
+
+                /* Fill background */
+                const isGrad = canvasBg.startsWith('linear') || canvasBg.startsWith('radial');
+                if (canvasBg !== 'transparent') {
+                    if (isGrad) {
+                        /* Render gradient via tiny temp div */
+                        const tmp = document.createElement('div');
+                        tmp.style.cssText = `position:fixed;top:-9999px;left:-9999px;width:${exportW}px;height:${exportH}px;background:${canvasBg}`;
+                        document.body.appendChild(tmp);
+                        const gbg = await html2canvas(tmp, { scale:1, backgroundColor:null, logging:false });
+                        document.body.removeChild(tmp);
+                        ctx.drawImage(gbg, 0, 0, exportW, exportH);
+                    } else {
+                        ctx.fillStyle = canvasBg;
+                        ctx.fillRect(0, 0, exportW, exportH);
+                    }
+                }
+
+                /* Draw card centered */
+                const cardDrawW = exportCardW;   /* 1:1 with export space (CARD_SCALE baked into bitmap) */
+                const cardDrawH = cardBmp.height / CARD_SCALE;
+                const cardX = Math.round((exportW - cardDrawW) / 2);
+                const cardY = Math.round((exportH - cardDrawH) / 2);
+                ctx.drawImage(cardBmp, cardX, cardY, cardDrawW, cardDrawH);
+
+                finalCanvas = out;
+            }
+
+            pngData = finalCanvas.toDataURL('image/png');
+            document.getElementById('m-img').src = pngData;
+            const lbl = ratio === 'free'
+                ? 'Card only · transparent PNG'
+                : `${cfg.label} · ${cfg.w}×${cfg.h}px`;
+            document.getElementById('m-sub').textContent = lbl;
+            document.getElementById('overlay').classList.add('on');
+
+        } catch(e) {
+            console.error(e);
+            showToast('Render failed — try again');
+        } finally {
+            btn.classList.remove('busy');
+            btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5v-2z"/></svg>Download PNG`;
+        }
+    });
+
+    document.getElementById('btn-save').addEventListener('click',()=>{
+        if(!pngData) return;
+        const name=(document.getElementById('i-name').value||'review').replace(/\s+/g,'-').toLowerCase();
+        const a=document.createElement('a'); a.href=pngData; a.download=`gmaps-review-${name}.png`; a.click();
+        closeOverlay();
+    });
+    document.getElementById('btn-cancl').addEventListener('click',closeOverlay);
+    document.getElementById('overlay').addEventListener('click',e=>{ if(e.target===document.getElementById('overlay')) closeOverlay(); });
+    function closeOverlay(){ document.getElementById('overlay').classList.remove('on'); pngData=null; }
+
+    /* ══════════════════════════════════
+       COPY HTML
+    ══════════════════════════════════ */
+    document.getElementById('btn-copy').addEventListener('click',()=>{
+        navigator.clipboard.writeText(document.getElementById('gm-card').outerHTML)
+            .then(()=>showToast('HTML copied!'));
+    });
+
+    /* ══════════════════════════════════
+       TOAST
+    ══════════════════════════════════ */
+    function showToast(msg='Done!'){
+        const t=document.getElementById('toast');
+        t.textContent=msg; t.classList.add('on');
+        setTimeout(()=>t.classList.remove('on'),2400);
+    }
+
+    /* ══════════════════════════════════
+       LIVE BINDINGS
+    ══════════════════════════════════ */
+    ['i-name','i-meta','i-avatar','i-date','i-review','i-price','i-likes','i-currency'].forEach(id=>{
+        document.getElementById(id).addEventListener('input',sync);
+    });
+    document.getElementById('i-currency').addEventListener('change',sync);
+
+    /* ══════════════════════════════════
+       INIT
+    ══════════════════════════════════ */
+    drawPicker();
+    drawAvatar();
+    drawThumbs();
+    sync();
+    applyRatio(); /* sets up canvas-frame size, card font-size, and checker bg */
+
+</script>
+</body>
+</html>

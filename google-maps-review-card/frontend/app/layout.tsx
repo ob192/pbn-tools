@@ -120,7 +120,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     '@type': 'WebApplication',
                     '@id': `${BASE_URL}/#app`,
                     name: 'ReviewCard Builder',
-                    url: `${BASE_URL}/builder/`,
+                    url: `${BASE_URL}/builder/index.html`,
                     applicationCategory: 'BusinessApplication',
                     operatingSystem: 'Web',
                     offers: {
